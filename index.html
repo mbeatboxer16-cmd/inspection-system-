@@ -2027,7 +2027,7 @@
     
     function initializeMobileView() {
         currentMobilePage = 0;
-        updateMobilePageDisplay();
+        updateMobilePageDisplay(false); // スクロールしない
     }
     
     function changeMobilePage(direction) {
@@ -2042,10 +2042,10 @@
             currentMobilePage = totalPages - 1;
         }
         
-        updateMobilePageDisplay();
+        updateMobilePageDisplay(true); // ページ切り替え時のみスクロール
     }
     
-    function updateMobilePageDisplay() {
+    function updateMobilePageDisplay(shouldScroll = false) {
         const pages = document.querySelectorAll('.report-page');
         const totalPages = pages.length;
         
@@ -2072,10 +2072,12 @@
         if (prevBtn) prevBtn.disabled = currentMobilePage === 0;
         if (nextBtn) nextBtn.disabled = currentMobilePage === totalPages - 1;
         
-        // 先頭ページにスクロール
-        const nav = document.getElementById('mobileReportNav');
-        if (nav && window.innerWidth <= 768) {
-            nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // ページ切り替え時のみスクロール
+        if (shouldScroll) {
+            const nav = document.getElementById('mobileReportNav');
+            if (nav && window.innerWidth <= 768) {
+                nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
     }
     
