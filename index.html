@@ -412,6 +412,8 @@
 
         .report-page {
             padding: 10mm;
+            transform: none !important;
+            width: 100% !important;
         }
     }
 
@@ -774,6 +776,80 @@
 
         .master-info strong {
             font-size: 15px;
+        }
+
+        /* 月次点検簿のスマホ表示 */
+        .report-page {
+            transform: scale(0.4);
+            transform-origin: top left;
+            width: 250%;
+            margin-bottom: 20px;
+            border: 2px solid #667eea;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        /* スマホ用ナビゲーション */
+        .mobile-report-nav {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .mobile-nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mobile-nav-btn {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            min-width: 90px;
+        }
+
+        .mobile-nav-btn:active {
+            transform: scale(0.95);
+            background: #f0f0f0;
+        }
+
+        .mobile-nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .mobile-page-info {
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .mobile-zoom-info {
+            color: white;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        /* レポートコンテナの調整 */
+        #reportContainer {
+            overflow-x: hidden;
         }
     }
 
@@ -1784,6 +1860,8 @@
         
         container.innerHTML = '';
         
+        let pageIndex = 0;
+        
         targetProjects.forEach(project => {
             targetMachines.forEach(machine => {
                 const monthInspections = inspections.filter(i => {
@@ -1804,6 +1882,9 @@
                 
                 const page = document.createElement('div');
                 page.className = 'report-page';
+                page.setAttribute('data-page-index', pageIndex);
+                pageIndex++;
+                
                 page.innerHTML = `
                     <div class="report-title">建設機械使用前点検記録</div>
                     
@@ -1861,6 +1942,12 @@
                 container.appendChild(page);
             });
         });
+        
+        // スマホ用ナビゲーションを追加
+        if (pageIndex > 0) {
+            addMobileNavigation(pageIndex);
+            initializeMobileView();
+        }
     }
 
     function generateInspectionRows(monthInspections, year, month, daysInMonth) {
@@ -1910,6 +1997,95 @@
         
         return html;
     }
+
+    // スマホ用ナビゲーション
+    let currentMobilePage = 0;
+    
+    function addMobileNavigation(totalPages) {
+        const container = document.getElementById('reportContainer');
+        const nav = document.createElement('div');
+        nav.id = 'mobileReportNav';
+        nav.className = 'mobile-report-nav no-print';
+        nav.innerHTML = `
+            <div class="mobile-nav-content">
+                <button class="mobile-nav-btn" id="prevPageBtn" onclick="changeMobilePage(-1)">
+                    ◀️ 前へ
+                </button>
+                <div class="mobile-page-info">
+                    <span id="currentPageNum">1</span> / <span id="totalPageNum">${totalPages}</span>
+                </div>
+                <button class="mobile-nav-btn" id="nextPageBtn" onclick="changeMobilePage(1)">
+                    次へ ▶️
+                </button>
+            </div>
+            <div class="mobile-zoom-info">
+                📱 ピンチで拡大できます
+            </div>
+        `;
+        container.insertBefore(nav, container.firstChild);
+    }
+    
+    function initializeMobileView() {
+        currentMobilePage = 0;
+        updateMobilePageDisplay();
+    }
+    
+    function changeMobilePage(direction) {
+        const pages = document.querySelectorAll('.report-page');
+        const totalPages = pages.length;
+        
+        currentMobilePage += direction;
+        
+        if (currentMobilePage < 0) {
+            currentMobilePage = 0;
+        } else if (currentMobilePage >= totalPages) {
+            currentMobilePage = totalPages - 1;
+        }
+        
+        updateMobilePageDisplay();
+    }
+    
+    function updateMobilePageDisplay() {
+        const pages = document.querySelectorAll('.report-page');
+        const totalPages = pages.length;
+        
+        pages.forEach((page, index) => {
+            if (window.innerWidth <= 768) {
+                // スマホ表示：現在のページのみ表示
+                page.style.display = index === currentMobilePage ? 'block' : 'none';
+            } else {
+                // PC表示：すべて表示
+                page.style.display = 'block';
+            }
+        });
+        
+        // ページ番号更新
+        const currentPageNum = document.getElementById('currentPageNum');
+        const totalPageNum = document.getElementById('totalPageNum');
+        const prevBtn = document.getElementById('prevPageBtn');
+        const nextBtn = document.getElementById('nextPageBtn');
+        
+        if (currentPageNum) currentPageNum.textContent = currentMobilePage + 1;
+        if (totalPageNum) totalPageNum.textContent = totalPages;
+        
+        // ボタンの有効/無効
+        if (prevBtn) prevBtn.disabled = currentMobilePage === 0;
+        if (nextBtn) nextBtn.disabled = currentMobilePage === totalPages - 1;
+        
+        // 先頭ページにスクロール
+        const nav = document.getElementById('mobileReportNav');
+        if (nav && window.innerWidth <= 768) {
+            nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+    }
+    
+    // ウィンドウリサイズ時に表示を更新
+    window.addEventListener('resize', function() {
+        if (document.querySelectorAll('.report-page').length > 0) {
+            updateMobilePageDisplay();
+        }
+    });
+
 
     // タブ切り替え
     function switchTab(index) {
