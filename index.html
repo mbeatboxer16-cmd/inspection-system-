@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
@@ -11,784 +12,787 @@
             box-sizing: border-box;
         }
 
+```
+    body {
+        font-family: 'Meiryo', 'MS Gothic', sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        padding: 20px;
+    }
+
+    .container {
+        max-width: 1600px;
+        margin: 0 auto;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        overflow: hidden;
+    }
+
+    .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 30px;
+        text-align: center;
+    }
+
+    .header h1 {
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .header p {
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    .user-info {
+        background: rgba(255,255,255,0.2);
+        padding: 10px 20px;
+        border-radius: 10px;
+        margin-top: 15px;
+        display: inline-block;
+    }
+
+    .tabs {
+        display: flex;
+        background: #f5f5f5;
+        border-bottom: 2px solid #ddd;
+        overflow-x: auto;
+    }
+
+    .tab {
+        flex: 1;
+        min-width: 150px;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        background: #f5f5f5;
+        border: none;
+        font-size: 15px;
+        font-weight: bold;
+        transition: all 0.3s;
+        color: #666;
+    }
+
+    .tab:hover {
+        background: #e0e0e0;
+    }
+
+    .tab.active {
+        background: white;
+        color: #667eea;
+        border-bottom: 3px solid #667eea;
+    }
+
+    .content {
+        padding: 30px;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+        animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .section {
+        background: #f9f9f9;
+        padding: 25px;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .section h2 {
+        color: #667eea;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #667eea;
+        font-size: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 8px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 12px;
+        border: 2px solid #ddd;
+        border-radius: 8px;
+        font-size: 14px;
+        transition: border 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+        outline: none;
+        border-color: #667eea;
+    }
+
+    .btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 14px 30px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: transform 0.2s, box-shadow 0.2s;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+
+    .btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    }
+
+    .btn-success {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    }
+
+    .btn-warning {
+        background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    }
+
+    .btn-small {
+        padding: 8px 15px;
+        font-size: 14px;
+    }
+
+    .master-list {
+        list-style: none;
+    }
+
+    .master-item {
+        background: white;
+        padding: 15px;
+        margin-bottom: 10px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    .master-info {
+        flex: 1;
+    }
+
+    .master-info strong {
+        color: #667eea;
+        font-size: 16px;
+    }
+
+    .master-info span {
+        color: #666;
+        margin-left: 15px;
+    }
+
+    .master-info .detail {
+        display: block;
+        margin-top: 5px;
+        font-size: 14px;
+        color: #888;
+    }
+
+    .inspection-form {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    .inspection-category {
+        margin-bottom: 30px;
+    }
+
+    .inspection-category h3 {
+        background: #667eea;
+        color: white;
+        padding: 12px;
+        border-radius: 6px;
+        margin-bottom: 15px;
+        font-size: 18px;
+    }
+
+    .inspection-item {
+        display: grid;
+        grid-template-columns: 200px 300px 1fr;
+        gap: 15px;
+        padding: 15px;
+        background: #f9f9f9;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        align-items: center;
+    }
+
+    .inspection-item label {
+        font-weight: bold;
+        color: #333;
+    }
+
+    .inspection-item .check-description {
+        color: #666;
+        font-size: 13px;
+    }
+
+    .inspection-item select {
+        padding: 8px;
+        border: 2px solid #ddd;
+        border-radius: 6px;
+        font-size: 14px;
+    }
+
+    .report-page {
+        page-break-after: always;
+        background: white;
+        padding: 20px;
+    }
+
+    .report-title {
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 30px;
+        padding: 15px;
+        border: 3px solid #333;
+    }
+
+    .report-info-table {
+        width: 100%;
+        margin-bottom: 20px;
+        border-collapse: collapse;
+    }
+
+    .report-info-table td {
+        padding: 8px;
+        border: 1px solid #333;
+    }
+
+    .report-info-table .label {
+        background: #f0f0f0;
+        font-weight: bold;
+        width: 150px;
+    }
+
+    .report-main-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 11px;
+    }
+
+    .report-main-table th,
+    .report-main-table td {
+        border: 1px solid #333;
+        padding: 6px 4px;
+        text-align: center;
+    }
+
+    .report-main-table th {
+        background: #e0e0e0;
+        font-weight: bold;
+    }
+
+    .report-main-table .category-cell {
+        background: #f5f5f5;
+        font-weight: bold;
+        text-align: center;
+        vertical-align: middle;
+        writing-mode: vertical-rl;
+        text-orientation: upright;
+    }
+
+    .report-main-table .subcategory-cell {
+        background: #fafafa;
+        font-weight: bold;
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .report-main-table .item-cell {
+        text-align: left;
+        padding-left: 10px;
+        font-size: 10px;
+    }
+
+    .report-main-table .day-cell {
+        width: 30px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .report-main-table .status-ok {
+        background: #d4edda;
+        color: #155724;
+        font-weight: bold;
+    }
+
+    .report-main-table .status-ng {
+        background: #f8d7da;
+        color: #721c24;
+        font-weight: bold;
+    }
+
+    .report-footer {
+        margin-top: 20px;
+        padding: 15px;
+        border: 2px solid #333;
+    }
+
+    .report-footer p {
+        margin: 5px 0;
+        font-size: 12px;
+    }
+
+    .report-footer .sign-row {
+        margin-top: 15px;
+        border-top: 1px solid #333;
+        padding-top: 10px;
+    }
+
+    @media print {
         body {
-            font-family: 'Meiryo', 'MS Gothic', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
+            background: white;
+            padding: 0;
         }
 
         .container {
-            max-width: 1600px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
+            box-shadow: none;
+            border-radius: 0;
+            max-width: 100%;
         }
 
-        .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
-            text-align: center;
-        }
-
-        .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            font-size: 14px;
-            opacity: 0.9;
-        }
-
-        .user-info {
-            background: rgba(255,255,255,0.2);
-            padding: 10px 20px;
-            border-radius: 10px;
-            margin-top: 15px;
-            display: inline-block;
-        }
-
-        .tabs {
-            display: flex;
-            background: #f5f5f5;
-            border-bottom: 2px solid #ddd;
-            overflow-x: auto;
-        }
-
-        .tab {
-            flex: 1;
-            min-width: 150px;
-            padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            background: #f5f5f5;
-            border: none;
-            font-size: 15px;
-            font-weight: bold;
-            transition: all 0.3s;
-            color: #666;
-        }
-
-        .tab:hover {
-            background: #e0e0e0;
-        }
-
-        .tab.active {
-            background: white;
-            color: #667eea;
-            border-bottom: 3px solid #667eea;
+        .header,
+        .tabs,
+        .btn,
+        .no-print {
+            display: none !important;
         }
 
         .content {
-            padding: 30px;
+            padding: 0;
         }
 
-        .tab-content {
-            display: none;
+        .report-main-table {
+            font-size: 9px;
         }
 
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.3s;
+        .report-main-table th,
+        .report-main-table td {
+            padding: 3px 2px;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .report-page {
+            padding: 10mm;
+        }
+    }
+
+    .alert {
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+    }
+
+    .alert-success {
+        background: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    .alert-info {
+        background: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+
+    .alert-warning {
+        background: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeaa7;
+    }
+
+    .filters {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+    }
+
+    .modal.show {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        max-width: 600px;
+        width: 90%;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+
+    .modal-header {
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #667eea;
+    }
+
+    .modal-header h2 {
+        color: #667eea;
+    }
+
+    .modal-footer {
+        margin-top: 20px;
+        text-align: right;
+    }
+
+    .login-container {
+        max-width: 450px;
+        margin: 50px auto;
+        background: white;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+    }
+
+    .login-header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .login-header h2 {
+        color: #667eea;
+        font-size: 28px;
+        margin-bottom: 10px;
+    }
+
+    .login-tabs {
+        display: flex;
+        margin-bottom: 30px;
+        border-bottom: 2px solid #e0e0e0;
+    }
+
+    .login-tab {
+        flex: 1;
+        padding: 15px;
+        text-align: center;
+        cursor: pointer;
+        border: none;
+        background: none;
+        font-size: 16px;
+        color: #666;
+        transition: all 0.3s;
+    }
+
+    .login-tab.active {
+        color: #667eea;
+        border-bottom: 3px solid #667eea;
+    }
+
+    .login-form {
+        display: none;
+    }
+
+    .login-form.active {
+        display: block;
+    }
+
+    .loading {
+        text-align: center;
+        padding: 50px;
+        color: #667eea;
+    }
+
+    .spinner {
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 20px auto;
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    .sync-status {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: white;
+        padding: 10px 20px;
+        border-radius: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        font-size: 14px;
+        z-index: 999;
+    }
+
+    .sync-status.syncing {
+        background: #fff3cd;
+        color: #856404;
+    }
+
+    .sync-status.synced {
+        background: #d4edda;
+        color: #155724;
+    }
+
+    .sync-status.error {
+        background: #f8d7da;
+        color: #721c24;
+    }
+
+    /* ========================================
+       スマホ縦画面対応（768px以下）
+       ======================================== */
+    @media (max-width: 768px) {
+        body {
+            padding: 10px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+        }
+
+        .header p {
+            font-size: 13px;
+        }
+
+        /* タブを大きく、タップしやすく */
+        .tab {
+            min-width: 120px;
+            padding: 16px 10px;
+            font-size: 14px;
+        }
+
+        .content {
+            padding: 15px;
         }
 
         .section {
-            background: #f9f9f9;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 25px;
-            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin-bottom: 15px;
         }
 
         .section h2 {
-            color: #667eea;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
-            font-size: 20px;
+            font-size: 18px;
         }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
-
+        /* フォーム要素を大きく */
         .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: bold;
-            color: #333;
+            font-size: 15px;
+            margin-bottom: 10px;
         }
 
         .form-group input,
         .form-group select,
         .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border 0.3s;
-        }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 14px 30px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            padding: 14px;
             font-size: 16px;
-            font-weight: bold;
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-right: 10px;
-            margin-bottom: 10px;
+            min-height: 48px;
         }
 
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        .form-group textarea {
+            min-height: 100px;
         }
 
-        .btn-secondary {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        /* ボタンを大きく、タップしやすく */
+        .btn {
+            padding: 16px 24px;
+            font-size: 16px;
+            min-height: 50px;
+            width: 100%;
+            margin-right: 0;
+            margin-bottom: 12px;
         }
 
         .btn-small {
+            padding: 12px 18px;
+            font-size: 15px;
+            min-height: 44px;
+            width: auto;
+        }
+
+        /* マスターリストの表示を改善 */
+        .master-item {
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 12px;
+        }
+
+        .master-info {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .master-info strong {
+            font-size: 16px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .master-info span {
+            margin-left: 0;
+            display: block;
+            margin-top: 5px;
+        }
+
+        /* 点検フォームを縦並びに */
+        .inspection-item {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding: 15px;
+        }
+
+        .inspection-item label {
+            font-size: 16px;
+        }
+
+        .inspection-item .check-description {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .inspection-item select {
+            padding: 14px;
+            font-size: 16px;
+            min-height: 48px;
+        }
+
+        /* テーブルをスクロール可能に */
+        .report-info-table {
+            font-size: 14px;
+        }
+
+        .report-info-table td {
+            padding: 10px 8px;
+        }
+
+        /* 点検項目のカテゴリー */
+        .inspection-category h3 {
+            font-size: 16px;
+            padding: 12px 10px;
+        }
+
+        /* 印刷ボタンエリア */
+        .print-controls {
+            flex-direction: column;
+        }
+
+        .print-controls button {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        /* ヘッダーの余白調整 */
+        .user-info {
             padding: 8px 15px;
             font-size: 14px;
         }
 
-        .master-list {
-            list-style: none;
+        /* 検索・フィルターエリア */
+        .search-container {
+            flex-direction: column;
         }
 
-        .master-item {
-            background: white;
-            padding: 15px;
+        .search-container input,
+        .search-container select {
+            width: 100%;
             margin-bottom: 10px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+    }
+
+    /* スマホ縦画面（小さい画面）追加対応 */
+    @media (max-width: 480px) {
+        .header h1 {
+            font-size: 20px;
         }
 
-        .master-info {
-            flex: 1;
-        }
-
-        .master-info strong {
-            color: #667eea;
-            font-size: 16px;
-        }
-
-        .master-info span {
-            color: #666;
-            margin-left: 15px;
-        }
-
-        .master-info .detail {
-            display: block;
-            margin-top: 5px;
-            font-size: 14px;
-            color: #888;
-        }
-
-        .inspection-form {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-        }
-
-        .inspection-category {
-            margin-bottom: 30px;
-        }
-
-        .inspection-category h3 {
-            background: #667eea;
-            color: white;
-            padding: 12px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            font-size: 18px;
-        }
-
-        .inspection-item {
-            display: grid;
-            grid-template-columns: 200px 300px 1fr;
-            gap: 15px;
-            padding: 15px;
-            background: #f9f9f9;
-            margin-bottom: 10px;
-            border-radius: 6px;
-            align-items: center;
-        }
-
-        .inspection-item label {
-            font-weight: bold;
-            color: #333;
-        }
-
-        .inspection-item .check-description {
-            color: #666;
+        .tab {
+            min-width: 100px;
+            padding: 14px 8px;
             font-size: 13px;
         }
 
-        .inspection-item select {
-            padding: 8px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
-        }
-
-        .report-page {
-            page-break-after: always;
-            background: white;
-            padding: 20px;
-        }
-
-        .report-title {
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 30px;
-            padding: 15px;
-            border: 3px solid #333;
-        }
-
-        .report-info-table {
-            width: 100%;
-            margin-bottom: 20px;
-            border-collapse: collapse;
-        }
-
-        .report-info-table td {
-            padding: 8px;
-            border: 1px solid #333;
-        }
-
-        .report-info-table .label {
-            background: #f0f0f0;
-            font-weight: bold;
-            width: 150px;
-        }
-
-        .report-main-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 11px;
-        }
-
-        .report-main-table th,
-        .report-main-table td {
-            border: 1px solid #333;
-            padding: 6px 4px;
-            text-align: center;
-        }
-
-        .report-main-table th {
-            background: #e0e0e0;
-            font-weight: bold;
-        }
-
-        .report-main-table .category-cell {
-            background: #f5f5f5;
-            font-weight: bold;
-            text-align: center;
-            vertical-align: middle;
-            writing-mode: vertical-rl;
-            text-orientation: upright;
-        }
-
-        .report-main-table .subcategory-cell {
-            background: #fafafa;
-            font-weight: bold;
-            text-align: center;
-            vertical-align: middle;
-        }
-
-        .report-main-table .item-cell {
-            text-align: left;
-            padding-left: 10px;
-            font-size: 10px;
-        }
-
-        .report-main-table .day-cell {
-            width: 30px;
-            font-size: 14px;
-            font-weight: bold;
-        }
-
-        .report-main-table .status-ok {
-            background: #d4edda;
-            color: #155724;
-            font-weight: bold;
-        }
-
-        .report-main-table .status-ng {
-            background: #f8d7da;
-            color: #721c24;
-            font-weight: bold;
-        }
-
-        .report-footer {
-            margin-top: 20px;
-            padding: 15px;
-            border: 2px solid #333;
-        }
-
-        .report-footer p {
-            margin: 5px 0;
-            font-size: 12px;
-        }
-
-        .report-footer .sign-row {
-            margin-top: 15px;
-            border-top: 1px solid #333;
-            padding-top: 10px;
-        }
-
-        @media print {
-            body {
-                background: white;
-                padding: 0;
-            }
-
-            .container {
-                box-shadow: none;
-                border-radius: 0;
-                max-width: 100%;
-            }
-
-            .header,
-            .tabs,
-            .btn,
-            .no-print {
-                display: none !important;
-            }
-
-            .content {
-                padding: 0;
-            }
-
-            .report-main-table {
-                font-size: 9px;
-            }
-
-            .report-main-table th,
-            .report-main-table td {
-                padding: 3px 2px;
-            }
-
-            .report-page {
-                padding: 10mm;
-            }
-        }
-
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .alert-info {
-            background: #d1ecf1;
-            color: #0c5460;
-            border: 1px solid #bee5eb;
-        }
-
-        .alert-warning {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
-
-        .filters {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.5);
-        }
-
-        .modal.show {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 15px;
-            max-width: 600px;
-            width: 90%;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            margin-bottom: 20px;
-            padding-bottom: 10px;
-            border-bottom: 2px solid #667eea;
-        }
-
-        .modal-header h2 {
-            color: #667eea;
-        }
-
-        .modal-footer {
-            margin-top: 20px;
-            text-align: right;
-        }
-
-        .login-container {
-            max-width: 450px;
-            margin: 50px auto;
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-        }
-
-        .login-header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .login-header h2 {
-            color: #667eea;
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .login-tabs {
-            display: flex;
-            margin-bottom: 30px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .login-tab {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            border: none;
-            background: none;
+        .section h2 {
             font-size: 16px;
-            color: #666;
-            transition: all 0.3s;
         }
 
-        .login-tab.active {
-            color: #667eea;
-            border-bottom: 3px solid #667eea;
+        .btn {
+            font-size: 15px;
+            padding: 14px 20px;
         }
 
-        .login-form {
-            display: none;
+        .inspection-item label {
+            font-size: 15px;
         }
 
-        .login-form.active {
-            display: block;
+        .master-info strong {
+            font-size: 15px;
         }
+    }
 
-        .loading {
-            text-align: center;
-            padding: 50px;
-            color: #667eea;
-        }
-
-        .spinner {
-            border: 4px solid #f3f3f3;
-            border-top: 4px solid #667eea;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .sync-status {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-            font-size: 14px;
-            z-index: 999;
-        }
-
-        .sync-status.syncing {
+    /* 横画面の場合の注意表示 */
+    @media (max-width: 768px) and (orientation: portrait) {
+        .orientation-tip {
             background: #fff3cd;
+            border: 2px solid #ffc107;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 14px;
             color: #856404;
         }
+    }
+</style>
+```
 
-        .sync-status.synced {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .sync-status.error {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
-        /* ========================================
-           スマホ縦画面対応（768px以下）
-           ======================================== */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-
-            .header h1 {
-                font-size: 22px;
-            }
-
-            .header p {
-                font-size: 13px;
-            }
-
-            /* タブを大きく、タップしやすく */
-            .tab {
-                min-width: 120px;
-                padding: 16px 10px;
-                font-size: 14px;
-            }
-
-            .content {
-                padding: 15px;
-            }
-
-            .section {
-                padding: 15px;
-                margin-bottom: 15px;
-            }
-
-            .section h2 {
-                font-size: 18px;
-            }
-
-            /* フォーム要素を大きく */
-            .form-group label {
-                font-size: 15px;
-                margin-bottom: 10px;
-            }
-
-            .form-group input,
-            .form-group select,
-            .form-group textarea {
-                padding: 14px;
-                font-size: 16px;
-                min-height: 48px;
-            }
-
-            .form-group textarea {
-                min-height: 100px;
-            }
-
-            /* ボタンを大きく、タップしやすく */
-            .btn {
-                padding: 16px 24px;
-                font-size: 16px;
-                min-height: 50px;
-                width: 100%;
-                margin-right: 0;
-                margin-bottom: 12px;
-            }
-
-            .btn-small {
-                padding: 12px 18px;
-                font-size: 15px;
-                min-height: 44px;
-                width: auto;
-            }
-
-            /* マスターリストの表示を改善 */
-            .master-item {
-                flex-direction: column;
-                align-items: flex-start;
-                padding: 12px;
-            }
-
-            .master-info {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-            .master-info strong {
-                font-size: 16px;
-                display: block;
-                margin-bottom: 5px;
-            }
-
-            .master-info span {
-                margin-left: 0;
-                display: block;
-                margin-top: 5px;
-            }
-
-            /* 点検フォームを縦並びに */
-            .inspection-item {
-                grid-template-columns: 1fr;
-                gap: 10px;
-                padding: 15px;
-            }
-
-            .inspection-item label {
-                font-size: 16px;
-            }
-
-            .inspection-item .check-description {
-                font-size: 14px;
-                margin-top: 5px;
-            }
-
-            .inspection-item select {
-                padding: 14px;
-                font-size: 16px;
-                min-height: 48px;
-            }
-
-            /* テーブルをスクロール可能に */
-            .report-info-table {
-                font-size: 14px;
-            }
-
-            .report-info-table td {
-                padding: 10px 8px;
-            }
-
-            /* 点検項目のカテゴリー */
-            .inspection-category h3 {
-                font-size: 16px;
-                padding: 12px 10px;
-            }
-
-            /* 印刷ボタンエリア */
-            .print-controls {
-                flex-direction: column;
-            }
-
-            .print-controls button {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-
-            /* ヘッダーの余白調整 */
-            .user-info {
-                padding: 8px 15px;
-                font-size: 14px;
-            }
-
-            /* 検索・フィルターエリア */
-            .search-container {
-                flex-direction: column;
-            }
-
-            .search-container input,
-            .search-container select {
-                width: 100%;
-                margin-bottom: 10px;
-            }
-        }
-
-        /* スマホ縦画面（小さい画面）追加対応 */
-        @media (max-width: 480px) {
-            .header h1 {
-                font-size: 20px;
-            }
-
-            .tab {
-                min-width: 100px;
-                padding: 14px 8px;
-                font-size: 13px;
-            }
-
-            .section h2 {
-                font-size: 16px;
-            }
-
-            .btn {
-                font-size: 15px;
-                padding: 14px 20px;
-            }
-
-            .inspection-item label {
-                font-size: 15px;
-            }
-
-            .master-info strong {
-                font-size: 15px;
-            }
-        }
-
-        /* 横画面の場合の注意表示 */
-        @media (max-width: 768px) and (orientation: portrait) {
-            .orientation-tip {
-                background: #fff3cd;
-                border: 2px solid #ffc107;
-                padding: 12px;
-                margin: 10px 0;
-                border-radius: 8px;
-                text-align: center;
-                font-size: 14px;
-                color: #856404;
-            }
-        }
-    </style>
 </head>
 <body>
     <!-- メインアプリケーション -->
@@ -799,938 +803,1106 @@
                 <p>機械の日々の点検を簡単に記録・管理できます</p>
             </div>
 
-            <div class="tabs">
-                <button class="tab active" onclick="switchTab(0)">🔧 機械マスター</button>
-                <button class="tab" onclick="switchTab(1)">🏗️ 工事マスター</button>
-                <button class="tab" onclick="switchTab(2)">👤 担当者マスター</button>
-                <button class="tab" onclick="switchTab(3)">✍️ 点検入力</button>
-                <button class="tab" onclick="switchTab(4)">📊 月次点検簿</button>
-            </div>
-
-            <div class="content">
-                <!-- タブ1: 機械マスター -->
-                <div class="tab-content active" id="tab-0">
-                    <div class="section">
-                        <h2>機械マスター登録</h2>
-                        <form id="machineForm" onsubmit="addMachine(event)">
-                            <div class="form-group">
-                                <label for="machineName">機械名称 *</label>
-                                <input type="text" id="machineName" required placeholder="例: PC78UU BH0.25㎥ クレーン仕様">
-                            </div>
-                            <div class="form-group">
-                                <label for="machineClass">階級 *</label>
-                                <input type="text" id="machineClass" required placeholder="例: 0.25㎥級">
-                            </div>
-                            <div class="form-group">
-                                <label for="machineNote">備考</label>
-                                <textarea id="machineNote" rows="3" placeholder="その他の情報があれば記入"></textarea>
-                            </div>
-                            <button type="submit" class="btn">➕ 機械を登録</button>
-                        </form>
-                    </div>
-
-                    <div class="section">
-                        <h2>登録済み機械一覧</h2>
-                        <ul class="master-list" id="machineList"></ul>
-                    </div>
-                </div>
-
-                <!-- タブ2: 工事マスター -->
-                <div class="tab-content" id="tab-1">
-                    <div class="section">
-                        <h2>工事マスター登録</h2>
-                        <form id="projectForm" onsubmit="addProject(event)">
-                            <div class="form-group">
-                                <label for="projectName">工事名 *</label>
-                                <input type="text" id="projectName" required placeholder="例: 経営体育成基盤整備事業（土地総）針原地区第１号工事">
-                            </div>
-                            <div class="form-group">
-                                <label for="projectLocation">工事箇所 *</label>
-                                <input type="text" id="projectLocation" required placeholder="例: 坂井市 春江町 針原他 地係">
-                            </div>
-                            <div class="form-group">
-                                <label for="contractorName">請負者名称 *</label>
-                                <input type="text" id="contractorName" required placeholder="例: ㈱豊岡工務店">
-                            </div>
-                            <button type="submit" class="btn">➕ 工事を登録</button>
-                        </form>
-                    </div>
-
-                    <div class="section">
-                        <h2>登録済み工事一覧</h2>
-                        <ul class="master-list" id="projectList"></ul>
-                    </div>
-                </div>
-
-                <!-- タブ3: 担当者マスター -->
-                <div class="tab-content" id="tab-2">
-                    <div class="section">
-                        <h2>担当者マスター登録</h2>
-                        <form id="personForm" onsubmit="addPerson(event)">
-                            <div class="form-group">
-                                <label for="personName">担当者名 *</label>
-                                <input type="text" id="personName" required placeholder="例: 山田 太郎">
-                            </div>
-                            <div class="form-group">
-                                <label for="personPosition">役職</label>
-                                <input type="text" id="personPosition" placeholder="例: 現場主任">
-                            </div>
-                            <button type="submit" class="btn">➕ 担当者を登録</button>
-                        </form>
-                    </div>
-
-                    <div class="section">
-                        <h2>登録済み担当者一覧</h2>
-                        <ul class="master-list" id="personList"></ul>
-                    </div>
-                </div>
-
-                <!-- タブ4: 点検入力 -->
-                <div class="tab-content" id="tab-3">
-                    <div class="section">
-                        <h2>点検情報入力</h2>
-                        <div class="form-group">
-                            <label for="inspectionProject">工事選択 *</label>
-                            <select id="inspectionProject" required onchange="updateProjectInfo()">
-                                <option value="">--- 工事を選択 ---</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="inspectionMachine">点検対象機械 *</label>
-                            <select id="inspectionMachine" required>
-                                <option value="">--- 機械を選択 ---</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label for="inspectionDate">点検日 *</label>
-                            <input type="date" id="inspectionDate" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="inspectionPerson">担当者</label>
-                            <select id="inspectionPerson">
-                                <option value="">--- 担当者を選択 ---</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="section">
-                        <h2>点検項目</h2>
-                        <div class="inspection-form" id="inspectionItems"></div>
-                        <button class="btn" onclick="saveInspection()">💾 点検結果を保存</button>
-                        <button class="btn btn-secondary" onclick="clearInspectionForm()">🔄 フォームをクリア</button>
-                    </div>
-                </div>
-
-                <!-- タブ5: 月次点検簿 -->
-                <div class="tab-content" id="tab-4">
-                    <div class="section no-print">
-                        <h2>表示設定</h2>
-                        <div class="filters">
-                            <div class="form-group">
-                                <label for="reportProject">工事選択</label>
-                                <select id="reportProject" onchange="generateReport()">
-                                    <option value="">--- すべて ---</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="reportMachine">機械選択</label>
-                                <select id="reportMachine" onchange="generateReport()">
-                                    <option value="">--- すべて ---</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="reportYear">年</label>
-                                <input type="number" id="reportYear" value="2025" onchange="generateReport()">
-                            </div>
-                            <div class="form-group">
-                                <label for="reportMonth">月</label>
-                                <select id="reportMonth" onchange="generateReport()">
-                                    <option value="1">1月</option>
-                                    <option value="2">2月</option>
-                                    <option value="3">3月</option>
-                                    <option value="4">4月</option>
-                                    <option value="5">5月</option>
-                                    <option value="6">6月</option>
-                                    <option value="7">7月</option>
-                                    <option value="8">8月</option>
-                                    <option value="9">9月</option>
-                                    <option value="10">10月</option>
-                                    <option value="11">11月</option>
-                                    <option value="12">12月</option>
-                                </select>
-                            </div>
-                        </div>
-                        <button class="btn btn-success" onclick="window.print()">🖨️ 印刷する</button>
-                        <button class="btn btn-secondary" onclick="exportData()">📥 データをダウンロード</button>
-                        <button class="btn btn-warning" onclick="importData()">📤 データを読み込む</button>
-                        <button class="btn btn-danger" onclick="clearAllData()">🗑️ 全データ削除</button>
-                    </div>
-
-                    <div id="reportContainer"></div>
-                </div>
-            </div>
+```
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab(0)">🔧 機械マスター</button>
+            <button class="tab" onclick="switchTab(1)">🏗️ 工事マスター</button>
+            <button class="tab" onclick="switchTab(2)">👤 担当者マスター</button>
+            <button class="tab" onclick="switchTab(3)">✍️ 点検入力</button>
+            <button class="tab" onclick="switchTab(4)">📊 月次点検簿</button>
         </div>
 
-    <!-- 編集モーダル -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="modalTitle">編集</h2>
+        <div class="content">
+            <!-- タブ1: 機械マスター -->
+            <div class="tab-content active" id="tab-0">
+                <div class="section">
+                    <h2>機械マスター登録</h2>
+                    <form id="machineForm" onsubmit="addMachine(event)">
+                        <div class="form-group">
+                            <label for="machineName">機械名称 *</label>
+                            <input type="text" id="machineName" required placeholder="例: PC78UU BH0.25㎥ クレーン仕様">
+                        </div>
+                        <div class="form-group">
+                            <label for="machineClass">階級 *</label>
+                            <input type="text" id="machineClass" required placeholder="例: 0.25㎥級">
+                        </div>
+                        <div class="form-group">
+                            <label for="machineNote">備考</label>
+                            <textarea id="machineNote" rows="3" placeholder="その他の情報があれば記入"></textarea>
+                        </div>
+                        <button type="submit" class="btn">➕ 機械を登録</button>
+                    </form>
+                </div>
+
+                <div class="section">
+                    <h2>登録済み機械一覧</h2>
+                    <ul class="master-list" id="machineList"></ul>
+                </div>
             </div>
-            <div id="modalBody"></div>
-            <div class="modal-footer">
-                <button class="btn" onclick="saveEdit()">💾 保存</button>
-                <button class="btn btn-secondary" onclick="closeModal()">✖️ キャンセル</button>
+
+            <!-- タブ2: 工事マスター -->
+            <div class="tab-content" id="tab-1">
+                <div class="section">
+                    <h2>工事マスター登録</h2>
+                    <form id="projectForm" onsubmit="addProject(event)">
+                        <div class="form-group">
+                            <label for="projectName">工事名 *</label>
+                            <input type="text" id="projectName" required placeholder="例: 経営体育成基盤整備事業（土地総）針原地区第１号工事">
+                        </div>
+                        <div class="form-group">
+                            <label for="projectLocation">工事箇所 *</label>
+                            <input type="text" id="projectLocation" required placeholder="例: 坂井市 春江町 針原他 地係">
+                        </div>
+                        <div class="form-group">
+                            <label for="contractorName">請負者名称 *</label>
+                            <input type="text" id="contractorName" required placeholder="例: ㈱豊岡工務店">
+                        </div>
+                        <button type="submit" class="btn">➕ 工事を登録</button>
+                    </form>
+                </div>
+
+                <div class="section">
+                    <h2>登録済み工事一覧</h2>
+                    <ul class="master-list" id="projectList"></ul>
+                </div>
+            </div>
+
+            <!-- タブ3: 担当者マスター -->
+            <div class="tab-content" id="tab-2">
+                <div class="section">
+                    <h2>担当者マスター登録</h2>
+                    <form id="personForm" onsubmit="addPerson(event)">
+                        <div class="form-group">
+                            <label for="personName">担当者名 *</label>
+                            <input type="text" id="personName" required placeholder="例: 山田 太郎">
+                        </div>
+                        <div class="form-group">
+                            <label for="personPosition">役職</label>
+                            <input type="text" id="personPosition" placeholder="例: 現場主任">
+                        </div>
+                        <button type="submit" class="btn">➕ 担当者を登録</button>
+                    </form>
+                </div>
+
+                <div class="section">
+                    <h2>登録済み担当者一覧</h2>
+                    <ul class="master-list" id="personList"></ul>
+                </div>
+            </div>
+
+            <!-- タブ4: 点検入力 -->
+            <div class="tab-content" id="tab-3">
+                <div class="section">
+                    <h2>点検情報入力</h2>
+                    <div class="form-group">
+                        <label for="inspectionProject">工事選択 *</label>
+                        <select id="inspectionProject" required onchange="updateProjectInfo()">
+                            <option value="">--- 工事を選択 ---</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inspectionMachine">点検対象機械 *</label>
+                        <select id="inspectionMachine" required>
+                            <option value="">--- 機械を選択 ---</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="inspectionDate">点検日 *</label>
+                        <input type="date" id="inspectionDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="inspectionPerson">担当者</label>
+                        <select id="inspectionPerson">
+                            <option value="">--- 担当者を選択 ---</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <h2>点検項目</h2>
+                    <div class="inspection-form" id="inspectionItems"></div>
+                    <button class="btn" onclick="saveInspection()">💾 点検結果を保存</button>
+                    <button class="btn btn-secondary" onclick="clearInspectionForm()">🔄 フォームをクリア</button>
+                </div>
+            </div>
+
+            <!-- タブ5: 月次点検簿 -->
+            <div class="tab-content" id="tab-4">
+                <div class="section no-print">
+                    <h2>表示設定</h2>
+                    <div class="filters">
+                        <div class="form-group">
+                            <label for="reportProject">工事選択</label>
+                            <select id="reportProject" onchange="generateReport()">
+                                <option value="">--- すべて ---</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="reportMachine">機械選択</label>
+                            <select id="reportMachine" onchange="generateReport()">
+                                <option value="">--- すべて ---</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="reportYear">年</label>
+                            <input type="number" id="reportYear" value="2025" onchange="generateReport()">
+                        </div>
+                        <div class="form-group">
+                            <label for="reportMonth">月</label>
+                            <select id="reportMonth" onchange="generateReport()">
+                                <option value="1">1月</option>
+                                <option value="2">2月</option>
+                                <option value="3">3月</option>
+                                <option value="4">4月</option>
+                                <option value="5">5月</option>
+                                <option value="6">6月</option>
+                                <option value="7">7月</option>
+                                <option value="8">8月</option>
+                                <option value="9">9月</option>
+                                <option value="10">10月</option>
+                                <option value="11">11月</option>
+                                <option value="12">12月</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button class="btn btn-success" onclick="window.print()">🖨️ 印刷する</button>
+                    <button class="btn btn-secondary" onclick="exportData()">📥 データをダウンロード</button>
+                    <button class="btn btn-warning" onclick="importData()">📤 データを読み込む（上書き）</button>
+                    <button class="btn" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);" onclick="mergeData()">🔄 データを結合</button>
+                    <button class="btn btn-danger" onclick="clearAllData()">🗑️ 全データ削除</button>
+                </div>
+
+                <div id="reportContainer"></div>
             </div>
         </div>
     </div>
 
-    <script>
-        // 点検項目の定義
-        const inspectionItems = [
-            {
-                category: 'エンジン',
-                items: [
-                    { subCategory: '本体', item: 'かかり具合', description: '重くないか' },
-                    { subCategory: '本体', item: '異音', description: 'ベルトの滑る音' },
-                    { subCategory: '本体', item: '排気色', description: '青白くないか' },
-                    { subCategory: '本体', item: '排気音', description: '一定であるか' },
-                    { subCategory: '燃料装置', item: '油漏れ', description: '周囲の確認' },
-                    { subCategory: '冷却装置', item: '水量・水漏れ', description: '確認' },
-                    { subCategory: '電気装置', item: 'モニター', description: 'モニターにて確認' }
-                ]
-            },
-            {
-                category: '走行装置',
-                items: [
-                    { subCategory: '履帯', item: '亀裂', description: '目視にて確認' },
-                    { subCategory: '履帯', item: 'たわみ', description: '目視にて確認' }
-                ]
-            },
-            {
-                category: '作業装置',
-                items: [
-                    { subCategory: 'ブーム', item: '亀裂', description: '目視にて確認' },
-                    { subCategory: 'アーム', item: '亀裂', description: '目視にて確認' },
-                    { subCategory: 'バケット', item: '亀裂', description: '目視にて確認' }
-                ]
-            },
-            {
-                category: '油圧装置',
-                items: [
-                    { subCategory: 'シリンダー', item: '油漏れ', description: '目視にて確認' },
-                    { subCategory: '作動油量', item: '油量', description: 'モニターで目視にて確認' }
-                ]
-            },
-            {
-                category: '安全装置',
-                items: [
-                    { subCategory: 'レバーロック', item: 'ロック', description: 'ロックがかかるか確認' },
-                    { subCategory: 'クラクション', item: 'クラクション', description: '鳴るか確認' },
-                    { subCategory: '旋回ロック', item: 'ロック', description: 'ロックがかかるか確認' }
-                ]
-            }
+<!-- 編集モーダル -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2 id="modalTitle">編集</h2>
+        </div>
+        <div id="modalBody"></div>
+        <div class="modal-footer">
+            <button class="btn" onclick="saveEdit()">💾 保存</button>
+            <button class="btn btn-secondary" onclick="closeModal()">✖️ キャンセル</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 点検項目の定義
+    const inspectionItems = [
+        {
+            category: 'エンジン',
+            items: [
+                { subCategory: '本体', item: 'かかり具合', description: '重くないか' },
+                { subCategory: '本体', item: '異音', description: 'ベルトの滑る音' },
+                { subCategory: '本体', item: '排気色', description: '青白くないか' },
+                { subCategory: '本体', item: '排気音', description: '一定であるか' },
+                { subCategory: '燃料装置', item: '油漏れ', description: '周囲の確認' },
+                { subCategory: '冷却装置', item: '水量・水漏れ', description: '確認' },
+                { subCategory: '電気装置', item: 'モニター', description: 'モニターにて確認' }
+            ]
+        },
+        {
+            category: '走行装置',
+            items: [
+                { subCategory: '履帯', item: '亀裂', description: '目視にて確認' },
+                { subCategory: '履帯', item: 'たわみ', description: '目視にて確認' }
+            ]
+        },
+        {
+            category: '作業装置',
+            items: [
+                { subCategory: 'ブーム', item: '亀裂', description: '目視にて確認' },
+                { subCategory: 'アーム', item: '亀裂', description: '目視にて確認' },
+                { subCategory: 'バケット', item: '亀裂', description: '目視にて確認' }
+            ]
+        },
+        {
+            category: '油圧装置',
+            items: [
+                { subCategory: 'シリンダー', item: '油漏れ', description: '目視にて確認' },
+                { subCategory: '作動油量', item: '油量', description: 'モニターで目視にて確認' }
+            ]
+        },
+        {
+            category: '安全装置',
+            items: [
+                { subCategory: 'レバーロック', item: 'ロック', description: 'ロックがかかるか確認' },
+                { subCategory: 'クラクション', item: 'クラクション', description: '鳴るか確認' },
+                { subCategory: '旋回ロック', item: 'ロック', description: 'ロックがかかるか確認' }
+            ]
+        }
+    ];
+
+    // データストレージ
+    let machines = [];
+    let projects = [];
+    let persons = [];
+    let inspections = [];
+    let currentEditType = '';
+    let currentEditId = '';
+
+    // 初期化
+    function init() {
+        document.getElementById('mainApp').style.display = 'block';
+        loadData();
+        initApp();
+    }
+
+    // データの読み込み
+    function loadData() {
+        machines = JSON.parse(localStorage.getItem('machines') || '[]');
+        projects = JSON.parse(localStorage.getItem('projects') || '[]');
+        persons = JSON.parse(localStorage.getItem('persons') || '[]');
+        inspections = JSON.parse(localStorage.getItem('inspections') || '[]');
+    }
+
+    // データの保存
+    function saveData() {
+        localStorage.setItem('machines', JSON.stringify(machines));
+        localStorage.setItem('projects', JSON.stringify(projects));
+        localStorage.setItem('persons', JSON.stringify(persons));
+        localStorage.setItem('inspections', JSON.stringify(inspections));
+    }
+
+    // アプリ初期化
+    function initApp() {
+        renderMachineList();
+        renderProjectList();
+        renderPersonList();
+        updateAllSelects();
+        renderInspectionForm();
+        
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('inspectionDate').value = today;
+        
+        const now = new Date();
+        document.getElementById('reportYear').value = now.getFullYear();
+        document.getElementById('reportMonth').value = now.getMonth() + 1;
+    }
+
+    // 機械を追加
+    function addMachine(event) {
+        event.preventDefault();
+        
+        const machine = {
+            id: Date.now().toString(),
+            name: document.getElementById('machineName').value,
+            class: document.getElementById('machineClass').value,
+            note: document.getElementById('machineNote').value,
+            createdAt: new Date().toISOString()
+        };
+        
+        machines.push(machine);
+        saveData();
+        renderMachineList();
+        updateAllSelects();
+        
+        document.getElementById('machineForm').reset();
+        alert('✅ 機械を登録しました！');
+    }
+
+    // 工事を追加
+    function addProject(event) {
+        event.preventDefault();
+        
+        const project = {
+            id: Date.now().toString(),
+            name: document.getElementById('projectName').value,
+            location: document.getElementById('projectLocation').value,
+            contractor: document.getElementById('contractorName').value,
+            createdAt: new Date().toISOString()
+        };
+        
+        projects.push(project);
+        saveData();
+        renderProjectList();
+        updateAllSelects();
+        
+        document.getElementById('projectForm').reset();
+        alert('✅ 工事を登録しました！');
+    }
+
+    // 担当者を追加
+    function addPerson(event) {
+        event.preventDefault();
+        
+        const person = {
+            id: Date.now().toString(),
+            name: document.getElementById('personName').value,
+            position: document.getElementById('personPosition').value,
+            createdAt: new Date().toISOString()
+        };
+        
+        persons.push(person);
+        saveData();
+        renderPersonList();
+        updateAllSelects();
+        
+        document.getElementById('personForm').reset();
+        alert('✅ 担当者を登録しました！');
+    }
+
+    // 機械リストの表示
+    function renderMachineList() {
+        const list = document.getElementById('machineList');
+        
+        if (machines.length === 0) {
+            list.innerHTML = '<div class="alert alert-info">まだ機械が登録されていません。</div>';
+            return;
+        }
+        
+        list.innerHTML = machines.map(machine => `
+            <li class="master-item">
+                <div class="master-info">
+                    <strong>${machine.name}</strong>
+                    <span>階級: ${machine.class}</span>
+                    ${machine.note ? `<span class="detail">備考: ${machine.note}</span>` : ''}
+                </div>
+                <div>
+                    <button class="btn btn-warning btn-small" onclick="editMachine('${machine.id}')">✏️ 編集</button>
+                    <button class="btn btn-danger btn-small" onclick="deleteMachine('${machine.id}')">🗑️ 削除</button>
+                </div>
+            </li>
+        `).join('');
+    }
+
+    // 工事リストの表示
+    function renderProjectList() {
+        const list = document.getElementById('projectList');
+        
+        if (projects.length === 0) {
+            list.innerHTML = '<div class="alert alert-info">まだ工事が登録されていません。</div>';
+            return;
+        }
+        
+        list.innerHTML = projects.map(project => `
+            <li class="master-item">
+                <div class="master-info">
+                    <strong>${project.name}</strong>
+                    <span class="detail">工事箇所: ${project.location}</span>
+                    <span class="detail">請負者: ${project.contractor}</span>
+                </div>
+                <div>
+                    <button class="btn btn-warning btn-small" onclick="editProject('${project.id}')">✏️ 編集</button>
+                    <button class="btn btn-danger btn-small" onclick="deleteProject('${project.id}')">🗑️ 削除</button>
+                </div>
+            </li>
+        `).join('');
+    }
+
+    // 担当者リストの表示
+    function renderPersonList() {
+        const list = document.getElementById('personList');
+        
+        if (persons.length === 0) {
+            list.innerHTML = '<div class="alert alert-info">まだ担当者が登録されていません。</div>';
+            return;
+        }
+        
+        list.innerHTML = persons.map(person => `
+            <li class="master-item">
+                <div class="master-info">
+                    <strong>${person.name}</strong>
+                    ${person.position ? `<span>役職: ${person.position}</span>` : ''}
+                </div>
+                <div>
+                    <button class="btn btn-warning btn-small" onclick="editPerson('${person.id}')">✏️ 編集</button>
+                    <button class="btn btn-danger btn-small" onclick="deletePerson('${person.id}')">🗑️ 削除</button>
+                </div>
+            </li>
+        `).join('');
+    }
+
+    // 編集機能
+    function editMachine(id) {
+        const machine = machines.find(m => m.id === id);
+        currentEditType = 'machine';
+        currentEditId = id;
+        
+        document.getElementById('modalTitle').textContent = '機械編集';
+        document.getElementById('modalBody').innerHTML = `
+            <div class="form-group">
+                <label>機械名称 *</label>
+                <input type="text" id="editName" value="${machine.name}" required>
+            </div>
+            <div class="form-group">
+                <label>階級 *</label>
+                <input type="text" id="editClass" value="${machine.class}" required>
+            </div>
+            <div class="form-group">
+                <label>備考</label>
+                <textarea id="editNote" rows="3">${machine.note || ''}</textarea>
+            </div>
+        `;
+        
+        document.getElementById('editModal').classList.add('show');
+    }
+
+    function editProject(id) {
+        const project = projects.find(p => p.id === id);
+        currentEditType = 'project';
+        currentEditId = id;
+        
+        document.getElementById('modalTitle').textContent = '工事編集';
+        document.getElementById('modalBody').innerHTML = `
+            <div class="form-group">
+                <label>工事名 *</label>
+                <input type="text" id="editName" value="${project.name}" required>
+            </div>
+            <div class="form-group">
+                <label>工事箇所 *</label>
+                <input type="text" id="editLocation" value="${project.location}" required>
+            </div>
+            <div class="form-group">
+                <label>請負者名称 *</label>
+                <input type="text" id="editContractor" value="${project.contractor}" required>
+            </div>
+        `;
+        
+        document.getElementById('editModal').classList.add('show');
+    }
+
+    function editPerson(id) {
+        const person = persons.find(p => p.id === id);
+        currentEditType = 'person';
+        currentEditId = id;
+        
+        document.getElementById('modalTitle').textContent = '担当者編集';
+        document.getElementById('modalBody').innerHTML = `
+            <div class="form-group">
+                <label>担当者名 *</label>
+                <input type="text" id="editName" value="${person.name}" required>
+            </div>
+            <div class="form-group">
+                <label>役職</label>
+                <input type="text" id="editPosition" value="${person.position || ''}">
+            </div>
+        `;
+        
+        document.getElementById('editModal').classList.add('show');
+    }
+
+    function saveEdit() {
+        if (currentEditType === 'machine') {
+            const machine = machines.find(m => m.id === currentEditId);
+            machine.name = document.getElementById('editName').value;
+            machine.class = document.getElementById('editClass').value;
+            machine.note = document.getElementById('editNote').value;
+            renderMachineList();
+        } else if (currentEditType === 'project') {
+            const project = projects.find(p => p.id === currentEditId);
+            project.name = document.getElementById('editName').value;
+            project.location = document.getElementById('editLocation').value;
+            project.contractor = document.getElementById('editContractor').value;
+            renderProjectList();
+        } else if (currentEditType === 'person') {
+            const person = persons.find(p => p.id === currentEditId);
+            person.name = document.getElementById('editName').value;
+            person.position = document.getElementById('editPosition').value;
+            renderPersonList();
+        }
+        
+        saveData();
+        updateAllSelects();
+        closeModal();
+        alert('✅ 更新しました！');
+    }
+
+    function closeModal() {
+        document.getElementById('editModal').classList.remove('show');
+    }
+
+    // 削除機能
+    function deleteMachine(id) {
+        if (!confirm('この機械を削除してもよろしいですか？\n関連する点検記録も削除されます。')) return;
+        machines = machines.filter(m => m.id !== id);
+        inspections = inspections.filter(i => i.machineId !== id);
+        saveData();
+        renderMachineList();
+        updateAllSelects();
+    }
+
+    function deleteProject(id) {
+        if (!confirm('この工事を削除してもよろしいですか？\n関連する点検記録も削除されます。')) return;
+        projects = projects.filter(p => p.id !== id);
+        inspections = inspections.filter(i => i.projectId !== id);
+        saveData();
+        renderProjectList();
+        updateAllSelects();
+    }
+
+    function deletePerson(id) {
+        if (!confirm('この担当者を削除してもよろしいですか？')) return;
+        persons = persons.filter(p => p.id !== id);
+        saveData();
+        renderPersonList();
+    }
+
+    // すべての選択リストを更新
+    function updateAllSelects() {
+        updateMachineSelects();
+        updateProjectSelects();
+        updatePersonSelects();
+    }
+
+    function updateMachineSelects() {
+        const selects = [
+            document.getElementById('inspectionMachine'),
+            document.getElementById('reportMachine')
         ];
-
-        // データストレージ
-        let machines = [];
-        let projects = [];
-        let persons = [];
-        let inspections = [];
-        let currentEditType = '';
-        let currentEditId = '';
-
-        // 初期化
-        function init() {
-            document.getElementById('mainApp').style.display = 'block';
-            loadData();
-            initApp();
-        }
-
-        // データの読み込み
-        function loadData() {
-            machines = JSON.parse(localStorage.getItem('machines') || '[]');
-            projects = JSON.parse(localStorage.getItem('projects') || '[]');
-            persons = JSON.parse(localStorage.getItem('persons') || '[]');
-            inspections = JSON.parse(localStorage.getItem('inspections') || '[]');
-        }
-
-        // データの保存
-        function saveData() {
-            localStorage.setItem('machines', JSON.stringify(machines));
-            localStorage.setItem('projects', JSON.stringify(projects));
-            localStorage.setItem('persons', JSON.stringify(persons));
-            localStorage.setItem('inspections', JSON.stringify(inspections));
-        }
-
-        // アプリ初期化
-        function initApp() {
-            renderMachineList();
-            renderProjectList();
-            renderPersonList();
-            updateAllSelects();
-            renderInspectionForm();
-            
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('inspectionDate').value = today;
-            
-            const now = new Date();
-            document.getElementById('reportYear').value = now.getFullYear();
-            document.getElementById('reportMonth').value = now.getMonth() + 1;
-        }
-
-        // 機械を追加
-        function addMachine(event) {
-            event.preventDefault();
-            
-            const machine = {
-                id: Date.now().toString(),
-                name: document.getElementById('machineName').value,
-                class: document.getElementById('machineClass').value,
-                note: document.getElementById('machineNote').value,
-                createdAt: new Date().toISOString()
-            };
-            
-            machines.push(machine);
-            saveData();
-            renderMachineList();
-            updateAllSelects();
-            
-            document.getElementById('machineForm').reset();
-            alert('✅ 機械を登録しました！');
-        }
-
-        // 工事を追加
-        function addProject(event) {
-            event.preventDefault();
-            
-            const project = {
-                id: Date.now().toString(),
-                name: document.getElementById('projectName').value,
-                location: document.getElementById('projectLocation').value,
-                contractor: document.getElementById('contractorName').value,
-                createdAt: new Date().toISOString()
-            };
-            
-            projects.push(project);
-            saveData();
-            renderProjectList();
-            updateAllSelects();
-            
-            document.getElementById('projectForm').reset();
-            alert('✅ 工事を登録しました！');
-        }
-
-        // 担当者を追加
-        function addPerson(event) {
-            event.preventDefault();
-            
-            const person = {
-                id: Date.now().toString(),
-                name: document.getElementById('personName').value,
-                position: document.getElementById('personPosition').value,
-                createdAt: new Date().toISOString()
-            };
-            
-            persons.push(person);
-            saveData();
-            renderPersonList();
-            updateAllSelects();
-            
-            document.getElementById('personForm').reset();
-            alert('✅ 担当者を登録しました！');
-        }
-
-        // 機械リストの表示
-        function renderMachineList() {
-            const list = document.getElementById('machineList');
-            
-            if (machines.length === 0) {
-                list.innerHTML = '<div class="alert alert-info">まだ機械が登録されていません。</div>';
-                return;
-            }
-            
-            list.innerHTML = machines.map(machine => `
-                <li class="master-item">
-                    <div class="master-info">
-                        <strong>${machine.name}</strong>
-                        <span>階級: ${machine.class}</span>
-                        ${machine.note ? `<span class="detail">備考: ${machine.note}</span>` : ''}
-                    </div>
-                    <div>
-                        <button class="btn btn-warning btn-small" onclick="editMachine('${machine.id}')">✏️ 編集</button>
-                        <button class="btn btn-danger btn-small" onclick="deleteMachine('${machine.id}')">🗑️ 削除</button>
-                    </div>
-                </li>
-            `).join('');
-        }
-
-        // 工事リストの表示
-        function renderProjectList() {
-            const list = document.getElementById('projectList');
-            
-            if (projects.length === 0) {
-                list.innerHTML = '<div class="alert alert-info">まだ工事が登録されていません。</div>';
-                return;
-            }
-            
-            list.innerHTML = projects.map(project => `
-                <li class="master-item">
-                    <div class="master-info">
-                        <strong>${project.name}</strong>
-                        <span class="detail">工事箇所: ${project.location}</span>
-                        <span class="detail">請負者: ${project.contractor}</span>
-                    </div>
-                    <div>
-                        <button class="btn btn-warning btn-small" onclick="editProject('${project.id}')">✏️ 編集</button>
-                        <button class="btn btn-danger btn-small" onclick="deleteProject('${project.id}')">🗑️ 削除</button>
-                    </div>
-                </li>
-            `).join('');
-        }
-
-        // 担当者リストの表示
-        function renderPersonList() {
-            const list = document.getElementById('personList');
-            
-            if (persons.length === 0) {
-                list.innerHTML = '<div class="alert alert-info">まだ担当者が登録されていません。</div>';
-                return;
-            }
-            
-            list.innerHTML = persons.map(person => `
-                <li class="master-item">
-                    <div class="master-info">
-                        <strong>${person.name}</strong>
-                        ${person.position ? `<span>役職: ${person.position}</span>` : ''}
-                    </div>
-                    <div>
-                        <button class="btn btn-warning btn-small" onclick="editPerson('${person.id}')">✏️ 編集</button>
-                        <button class="btn btn-danger btn-small" onclick="deletePerson('${person.id}')">🗑️ 削除</button>
-                    </div>
-                </li>
-            `).join('');
-        }
-
-        // 編集機能
-        function editMachine(id) {
-            const machine = machines.find(m => m.id === id);
-            currentEditType = 'machine';
-            currentEditId = id;
-            
-            document.getElementById('modalTitle').textContent = '機械編集';
-            document.getElementById('modalBody').innerHTML = `
-                <div class="form-group">
-                    <label>機械名称 *</label>
-                    <input type="text" id="editName" value="${machine.name}" required>
-                </div>
-                <div class="form-group">
-                    <label>階級 *</label>
-                    <input type="text" id="editClass" value="${machine.class}" required>
-                </div>
-                <div class="form-group">
-                    <label>備考</label>
-                    <textarea id="editNote" rows="3">${machine.note || ''}</textarea>
-                </div>
-            `;
-            
-            document.getElementById('editModal').classList.add('show');
-        }
-
-        function editProject(id) {
-            const project = projects.find(p => p.id === id);
-            currentEditType = 'project';
-            currentEditId = id;
-            
-            document.getElementById('modalTitle').textContent = '工事編集';
-            document.getElementById('modalBody').innerHTML = `
-                <div class="form-group">
-                    <label>工事名 *</label>
-                    <input type="text" id="editName" value="${project.name}" required>
-                </div>
-                <div class="form-group">
-                    <label>工事箇所 *</label>
-                    <input type="text" id="editLocation" value="${project.location}" required>
-                </div>
-                <div class="form-group">
-                    <label>請負者名称 *</label>
-                    <input type="text" id="editContractor" value="${project.contractor}" required>
-                </div>
-            `;
-            
-            document.getElementById('editModal').classList.add('show');
-        }
-
-        function editPerson(id) {
-            const person = persons.find(p => p.id === id);
-            currentEditType = 'person';
-            currentEditId = id;
-            
-            document.getElementById('modalTitle').textContent = '担当者編集';
-            document.getElementById('modalBody').innerHTML = `
-                <div class="form-group">
-                    <label>担当者名 *</label>
-                    <input type="text" id="editName" value="${person.name}" required>
-                </div>
-                <div class="form-group">
-                    <label>役職</label>
-                    <input type="text" id="editPosition" value="${person.position || ''}">
-                </div>
-            `;
-            
-            document.getElementById('editModal').classList.add('show');
-        }
-
-        function saveEdit() {
-            if (currentEditType === 'machine') {
-                const machine = machines.find(m => m.id === currentEditId);
-                machine.name = document.getElementById('editName').value;
-                machine.class = document.getElementById('editClass').value;
-                machine.note = document.getElementById('editNote').value;
-                renderMachineList();
-            } else if (currentEditType === 'project') {
-                const project = projects.find(p => p.id === currentEditId);
-                project.name = document.getElementById('editName').value;
-                project.location = document.getElementById('editLocation').value;
-                project.contractor = document.getElementById('editContractor').value;
-                renderProjectList();
-            } else if (currentEditType === 'person') {
-                const person = persons.find(p => p.id === currentEditId);
-                person.name = document.getElementById('editName').value;
-                person.position = document.getElementById('editPosition').value;
-                renderPersonList();
-            }
-            
-            saveData();
-            updateAllSelects();
-            closeModal();
-            alert('✅ 更新しました！');
-        }
-
-        function closeModal() {
-            document.getElementById('editModal').classList.remove('show');
-        }
-
-        // 削除機能
-        function deleteMachine(id) {
-            if (!confirm('この機械を削除してもよろしいですか？\n関連する点検記録も削除されます。')) return;
-            machines = machines.filter(m => m.id !== id);
-            inspections = inspections.filter(i => i.machineId !== id);
-            saveData();
-            renderMachineList();
-            updateAllSelects();
-        }
-
-        function deleteProject(id) {
-            if (!confirm('この工事を削除してもよろしいですか？\n関連する点検記録も削除されます。')) return;
-            projects = projects.filter(p => p.id !== id);
-            inspections = inspections.filter(i => i.projectId !== id);
-            saveData();
-            renderProjectList();
-            updateAllSelects();
-        }
-
-        function deletePerson(id) {
-            if (!confirm('この担当者を削除してもよろしいですか？')) return;
-            persons = persons.filter(p => p.id !== id);
-            saveData();
-            renderPersonList();
-        }
-
-        // すべての選択リストを更新
-        function updateAllSelects() {
-            updateMachineSelects();
-            updateProjectSelects();
-            updatePersonSelects();
-        }
-
-        function updateMachineSelects() {
-            const selects = [
-                document.getElementById('inspectionMachine'),
-                document.getElementById('reportMachine')
-            ];
-            
-            selects.forEach(select => {
-                const currentValue = select.value;
-                const isInspectionSelect = select.id === 'inspectionMachine';
-                
-                select.innerHTML = isInspectionSelect 
-                    ? '<option value="">--- 機械を選択 ---</option>'
-                    : '<option value="">--- すべて ---</option>';
-                
-                machines.forEach(machine => {
-                    const option = document.createElement('option');
-                    option.value = machine.id;
-                    option.textContent = `${machine.name} (${machine.class})`;
-                    select.appendChild(option);
-                });
-                
-                select.value = currentValue;
-            });
-        }
-
-        function updateProjectSelects() {
-            const selects = [
-                document.getElementById('inspectionProject'),
-                document.getElementById('reportProject')
-            ];
-            
-            selects.forEach(select => {
-                const currentValue = select.value;
-                const isInspectionSelect = select.id === 'inspectionProject';
-                
-                select.innerHTML = isInspectionSelect 
-                    ? '<option value="">--- 工事を選択 ---</option>'
-                    : '<option value="">--- すべて ---</option>';
-                
-                projects.forEach(project => {
-                    const option = document.createElement('option');
-                    option.value = project.id;
-                    option.textContent = project.name;
-                    select.appendChild(option);
-                });
-                
-                select.value = currentValue;
-            });
-        }
-
-        function updatePersonSelects() {
-            const select = document.getElementById('inspectionPerson');
+        
+        selects.forEach(select => {
             const currentValue = select.value;
+            const isInspectionSelect = select.id === 'inspectionMachine';
             
-            select.innerHTML = '<option value="">--- 担当者を選択 ---</option>';
+            select.innerHTML = isInspectionSelect 
+                ? '<option value="">--- 機械を選択 ---</option>'
+                : '<option value="">--- すべて ---</option>';
             
-            persons.forEach(person => {
+            machines.forEach(machine => {
                 const option = document.createElement('option');
-                option.value = person.id;
-                option.textContent = person.position ? `${person.name} (${person.position})` : person.name;
+                option.value = machine.id;
+                option.textContent = `${machine.name} (${machine.class})`;
                 select.appendChild(option);
             });
             
             select.value = currentValue;
-        }
+        });
+    }
 
-        function updateProjectInfo() {}
-
-        // 点検フォームの生成
-        function renderInspectionForm() {
-            const container = document.getElementById('inspectionItems');
+    function updateProjectSelects() {
+        const selects = [
+            document.getElementById('inspectionProject'),
+            document.getElementById('reportProject')
+        ];
+        
+        selects.forEach(select => {
+            const currentValue = select.value;
+            const isInspectionSelect = select.id === 'inspectionProject';
             
-            container.innerHTML = inspectionItems.map(category => `
-                <div class="inspection-category">
-                    <h3>${category.category}</h3>
-                    ${category.items.map((item, index) => `
-                        <div class="inspection-item">
-                            <label>${item.subCategory} - ${item.item}</label>
-                            <span class="check-description">${item.description}</span>
-                            <select id="check_${category.category}_${index}">
-                                <option value="">---</option>
-                                <option value="○">○ (良好)</option>
-                                <option value="×">× (不良)</option>
-                                <option value="－">－ (該当なし)</option>
-                            </select>
-                        </div>
-                    `).join('')}
-                </div>
-            `).join('');
-        }
-
-        // 点検結果を保存
-        function saveInspection() {
-            const projectId = document.getElementById('inspectionProject').value;
-            const machineId = document.getElementById('inspectionMachine').value;
-            const date = document.getElementById('inspectionDate').value;
-            const personId = document.getElementById('inspectionPerson').value;
+            select.innerHTML = isInspectionSelect 
+                ? '<option value="">--- 工事を選択 ---</option>'
+                : '<option value="">--- すべて ---</option>';
             
-            if (!projectId || !machineId || !date) {
-                alert('❌ 工事、機械、点検日を入力してください。');
-                return;
-            }
-            
-            const results = {};
-            inspectionItems.forEach(category => {
-                category.items.forEach((item, index) => {
-                    const key = `${category.category}_${index}`;
-                    const value = document.getElementById(`check_${key}`).value;
-                    if (value) {
-                        results[key] = value;
-                    }
-                });
+            projects.forEach(project => {
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = project.name;
+                select.appendChild(option);
             });
             
-            inspections = inspections.filter(i => 
-                !(i.projectId === projectId && i.machineId === machineId && i.date === date)
-            );
-            
-            const inspection = {
-                id: Date.now().toString(),
-                projectId: projectId,
-                machineId: machineId,
-                date: date,
-                personId: personId,
-                results: results,
-                createdAt: new Date().toISOString()
-            };
-            
-            inspections.push(inspection);
-            saveData();
-            
-            alert('✅ 点検結果を保存しました！');
-        }
+            select.value = currentValue;
+        });
+    }
 
-        function clearInspectionForm() {
-            document.querySelectorAll('[id^="check_"]').forEach(select => {
-                select.value = '';
-            });
-        }
+    function updatePersonSelects() {
+        const select = document.getElementById('inspectionPerson');
+        const currentValue = select.value;
+        
+        select.innerHTML = '<option value="">--- 担当者を選択 ---</option>';
+        
+        persons.forEach(person => {
+            const option = document.createElement('option');
+            option.value = person.id;
+            option.textContent = person.position ? `${person.name} (${person.position})` : person.name;
+            select.appendChild(option);
+        });
+        
+        select.value = currentValue;
+    }
 
-        // データエクスポート
-        function exportData() {
-            const data = {
-                machines: machines,
-                projects: projects,
-                persons: persons,
-                inspections: inspections,
-                exportDate: new Date().toISOString()
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `点検簿データ_${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            
-            alert('✅ データをダウンロードしました！\nこのファイルをLINEで送れば、他の人も読み込めます。');
-        }
+    function updateProjectInfo() {}
 
-        // データインポート
-        function importData() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = 'application/json';
-            input.onchange = (e) => {
-                const file = e.target.files[0];
-                const reader = new FileReader();
-                reader.onload = (event) => {
-                    try {
-                        const data = JSON.parse(event.target.result);
-                        
-                        const confirmMessage = `データを読み込みます。\n\n` +
-                            `機械: ${data.machines?.length || 0}件\n` +
-                            `工事: ${data.projects?.length || 0}件\n` +
-                            `担当者: ${data.persons?.length || 0}件\n` +
-                            `点検記録: ${data.inspections?.length || 0}件\n\n` +
-                            `既存のデータは上書きされます。よろしいですか？`;
-                        
-                        if (confirm(confirmMessage)) {
-                            machines = data.machines || [];
-                            projects = data.projects || [];
-                            persons = data.persons || [];
-                            inspections = data.inspections || [];
-                            
-                            saveData();
-                            renderMachineList();
-                            renderProjectList();
-                            renderPersonList();
-                            updateAllSelects();
-                            
-                            alert('✅ データを読み込みました！');
-                        }
-                    } catch (error) {
-                        alert('❌ ファイルの読み込みに失敗しました。\nJSON形式のファイルを選択してください。');
-                        console.error('インポートエラー:', error);
-                    }
-                };
-                reader.readAsText(file);
-            };
-            input.click();
-        }
+    // 点検フォームの生成
+    function renderInspectionForm() {
+        const container = document.getElementById('inspectionItems');
+        
+        container.innerHTML = inspectionItems.map(category => `
+            <div class="inspection-category">
+                <h3>${category.category}</h3>
+                ${category.items.map((item, index) => `
+                    <div class="inspection-item">
+                        <label>${item.subCategory} - ${item.item}</label>
+                        <span class="check-description">${item.description}</span>
+                        <select id="check_${category.category}_${index}">
+                            <option value="">---</option>
+                            <option value="○">○ (良好)</option>
+                            <option value="×">× (不良)</option>
+                            <option value="－">－ (該当なし)</option>
+                        </select>
+                    </div>
+                `).join('')}
+            </div>
+        `).join('');
+    }
 
-        // 全データ削除
-        function clearAllData() {
-            if (!confirm('すべてのデータを削除してもよろしいですか？\nこの操作は取り消せません。')) return;
-            if (!confirm('本当に削除しますか？\nすべてのマスターと点検記録が削除されます。')) return;
-            
-            machines = [];
-            projects = [];
-            persons = [];
-            inspections = [];
-            saveData();
-            
-            renderMachineList();
-            renderProjectList();
-            renderPersonList();
-            updateAllSelects();
-            document.getElementById('reportContainer').innerHTML = '';
-            
-            alert('✅ すべてのデータを削除しました。');
+    // 点検結果を保存
+    function saveInspection() {
+        const projectId = document.getElementById('inspectionProject').value;
+        const machineId = document.getElementById('inspectionMachine').value;
+        const date = document.getElementById('inspectionDate').value;
+        const personId = document.getElementById('inspectionPerson').value;
+        
+        if (!projectId || !machineId || !date) {
+            alert('❌ 工事、機械、点検日を入力してください。');
+            return;
         }
-
-        // 月次レポートの生成
-        function generateReport() {
-            const projectId = document.getElementById('reportProject').value;
-            const machineId = document.getElementById('reportMachine').value;
-            const year = parseInt(document.getElementById('reportYear').value);
-            const month = parseInt(document.getElementById('reportMonth').value);
-            
-            const container = document.getElementById('reportContainer');
-            
-            if (machines.length === 0 || projects.length === 0) {
-                container.innerHTML = '<div class="alert alert-info">機械または工事が登録されていません。</div>';
-                return;
-            }
-            
-            const targetProjects = projectId ? projects.filter(p => p.id === projectId) : projects;
-            const targetMachines = machineId ? machines.filter(m => m.id === machineId) : machines;
-            
-            container.innerHTML = '';
-            
-            targetProjects.forEach(project => {
-                targetMachines.forEach(machine => {
-                    const monthInspections = inspections.filter(i => {
-                        if (i.projectId !== project.id || i.machineId !== machine.id) return false;
-                        const inspDate = new Date(i.date);
-                        return inspDate.getFullYear() === year && inspDate.getMonth() + 1 === month;
-                    });
-                    
-                    if (monthInspections.length === 0 && (projectId || machineId)) {
-                        // フィルタ指定時はデータがなくても表示
-                    } else if (monthInspections.length === 0) {
-                        return;
-                    }
-                    
-                    const daysInMonth = new Date(year, month, 0).getDate();
-                    const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-                    const halfDayIndex = Math.ceil(daysInMonth / 2);
-                    
-                    const page = document.createElement('div');
-                    page.className = 'report-page';
-                    page.innerHTML = `
-                        <div class="report-title">建設機械使用前点検記録</div>
-                        
-                        <table class="report-info-table">
-                            <tr>
-                                <td class="label">工事名</td>
-                                <td colspan="3">${project.name}</td>
-                                <td class="label">請負者名称</td>
-                                <td>${project.contractor}</td>
-                            </tr>
-                            <tr>
-                                <td class="label">工事箇所</td>
-                                <td colspan="3">${project.location}</td>
-                                <td class="label">対象年月</td>
-                                <td>${year}年${month}月</td>
-                            </tr>
-                        </table>
-                        
-                        <table class="report-info-table" style="margin-bottom: 30px;">
-                            <tr>
-                                <td class="label">機械名称</td>
-                                <td colspan="5">${machine.name} (${machine.class})</td>
-                            </tr>
-                        </table>
-                        
-                        <table class="report-main-table">
-                            <thead>
-                                <tr>
-                                    <th rowspan="2" width="60">大分類</th>
-                                    <th rowspan="2" width="80">中分類</th>
-                                    <th rowspan="2" width="180">点検項目</th>
-                                    <th colspan="${halfDayIndex}">上半期</th>
-                                    <th colspan="${daysInMonth - halfDayIndex}">下半期</th>
-                                </tr>
-                                <tr>
-                                    ${days.slice(0, halfDayIndex).map(d => `<th class="day-cell">${d}</th>`).join('')}
-                                    ${days.slice(halfDayIndex).map(d => `<th class="day-cell">${d}</th>`).join('')}
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${generateInspectionRows(monthInspections, year, month, daysInMonth)}
-                            </tbody>
-                        </table>
-                        
-                        <div class="report-footer">
-                            <div class="sign-row">
-                                <strong>確認サイン</strong>
-                            </div>
-                            <p>× があった場合は是正報告を書く</p>
-                            <p>是正処置報告書を書く</p>
-                            <p><strong>○は、何も変わりなし　　×は、改善の処置が必要</strong></p>
-                        </div>
-                    `;
-                    
-                    container.appendChild(page);
-                });
-            });
-        }
-
-        function generateInspectionRows(monthInspections, year, month, daysInMonth) {
-            const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
-            
-            let html = '';
-            inspectionItems.forEach(category => {
-                category.items.forEach((item, itemIndex) => {
-                    const isFirstInCategory = itemIndex === 0;
-                    const key = `${category.category}_${itemIndex}`;
-                    
-                    html += '<tr>';
-                    
-                    if (isFirstInCategory) {
-                        html += `<td rowspan="${category.items.length}" class="category-cell">${category.category}</td>`;
-                    }
-                    
-                    html += `<td class="subcategory-cell">${item.subCategory}</td>`;
-                    html += `<td class="item-cell">${item.item}<br><small>${item.description}</small></td>`;
-                    
-                    days.forEach(day => {
-                        const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                        const inspection = monthInspections.find(i => i.date === dateStr);
-                        const value = inspection?.results[key] || '';
-                        const statusClass = value === '○' ? 'status-ok' : value === '×' ? 'status-ng' : '';
-                        html += `<td class="${statusClass}">${value}</td>`;
-                    });
-                    
-                    html += '</tr>';
-                });
-            });
-            
-            // 担当者行を追加
-            html += '<tr style="background: #fffacd;">';
-            html += '<td colspan="3" class="subcategory-cell" style="text-align: center; font-weight: bold;">担当者</td>';
-            days.forEach(day => {
-                const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-                const inspection = monthInspections.find(i => i.date === dateStr);
-                let personName = '';
-                if (inspection && inspection.personId) {
-                    const person = persons.find(p => p.id === inspection.personId);
-                    personName = person ? person.name : '';
+        
+        const results = {};
+        inspectionItems.forEach(category => {
+            category.items.forEach((item, index) => {
+                const key = `${category.category}_${index}`;
+                const value = document.getElementById(`check_${key}`).value;
+                if (value) {
+                    results[key] = value;
                 }
-                html += `<td style="font-size: 10px; padding: 4px 2px;">${personName}</td>`;
             });
-            html += '</tr>';
-            
-            return html;
-        }
+        });
+        
+        inspections = inspections.filter(i => 
+            !(i.projectId === projectId && i.machineId === machineId && i.date === date)
+        );
+        
+        const inspection = {
+            id: Date.now().toString(),
+            projectId: projectId,
+            machineId: machineId,
+            date: date,
+            personId: personId,
+            results: results,
+            createdAt: new Date().toISOString()
+        };
+        
+        inspections.push(inspection);
+        saveData();
+        
+        alert('✅ 点検結果を保存しました！');
+    }
 
-        // タブ切り替え
-        function switchTab(index) {
-            document.querySelectorAll('.tab').forEach((tab, i) => {
-                tab.classList.toggle('active', i === index);
-            });
+    function clearInspectionForm() {
+        document.querySelectorAll('[id^="check_"]').forEach(select => {
+            select.value = '';
+        });
+    }
+
+    // データエクスポート
+    function exportData() {
+        const data = {
+            machines: machines,
+            projects: projects,
+            persons: persons,
+            inspections: inspections,
+            exportDate: new Date().toISOString()
+        };
+        
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `点検簿データ_${new Date().toISOString().split('T')[0]}.json`;
+        a.click();
+        URL.revokeObjectURL(url);
+        
+        alert('✅ データをダウンロードしました！\nこのファイルをLINEで送れば、他の人も読み込めます。');
+    }
+
+    // データインポート
+    function importData() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+        input.onchange = (e) => {
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    
+                    const confirmMessage = `データを読み込みます。\n\n` +
+                        `機械: ${data.machines?.length || 0}件\n` +
+                        `工事: ${data.projects?.length || 0}件\n` +
+                        `担当者: ${data.persons?.length || 0}件\n` +
+                        `点検記録: ${data.inspections?.length || 0}件\n\n` +
+                        `既存のデータは上書きされます。よろしいですか？`;
+                    
+                    if (confirm(confirmMessage)) {
+                        machines = data.machines || [];
+                        projects = data.projects || [];
+                        persons = data.persons || [];
+                        inspections = data.inspections || [];
+                        
+                        saveData();
+                        renderMachineList();
+                        renderProjectList();
+                        renderPersonList();
+                        updateAllSelects();
+                        
+                        alert('✅ データを読み込みました！');
+                    }
+                } catch (error) {
+                    alert('❌ ファイルの読み込みに失敗しました。\nJSON形式のファイルを選択してください。');
+                    console.error('インポートエラー:', error);
+                }
+            };
+            reader.readAsText(file);
+        };
+        input.click();
+    }
+
+    // データ結合機能
+    function mergeData() {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = 'application/json';
+        input.multiple = true; // 複数ファイル選択可能
+        
+        input.onchange = async (e) => {
+            const files = Array.from(e.target.files);
             
-            document.querySelectorAll('.tab-content').forEach((content, i) => {
-                content.classList.toggle('active', i === index);
-            });
-            
-            if (index === 4) {
-                generateReport();
+            if (files.length === 0) {
+                return;
             }
-        }
+            
+            try {
+                // すべてのファイルを読み込む
+                const allData = [];
+                
+                for (const file of files) {
+                    const text = await readFileAsText(file);
+                    const data = JSON.parse(text);
+                    allData.push({
+                        filename: file.name,
+                        data: data
+                    });
+                }
+                
+                // データを結合
+                const merged = mergeMultipleData(allData);
+                
+                // 結合結果を表示
+                const currentTotal = {
+                    machines: machines.length,
+                    projects: projects.length,
+                    persons: persons.length,
+                    inspections: inspections.length
+                };
+                
+                const confirmMessage = `${files.length}個のファイルを結合します。\n\n` +
+                    `【現在のデータ】\n` +
+                    `機械: ${currentTotal.machines}件\n` +
+                    `工事: ${currentTotal.projects}件\n` +
+                    `担当者: ${currentTotal.persons}件\n` +
+                    `点検記録: ${currentTotal.inspections}件\n\n` +
+                    `【結合後のデータ】\n` +
+                    `機械: ${merged.machines.length}件 (+${merged.machines.length - currentTotal.machines}件)\n` +
+                    `工事: ${merged.projects.length}件 (+${merged.projects.length - currentTotal.projects}件)\n` +
+                    `担当者: ${merged.persons.length}件 (+${merged.persons.length - currentTotal.persons}件)\n` +
+                    `点検記録: ${merged.inspections.length}件 (+${merged.inspections.length - currentTotal.inspections}件)\n\n` +
+                    `※重複データは自動的に統合されます。\n` +
+                    `よろしいですか？`;
+                
+                if (confirm(confirmMessage)) {
+                    machines = merged.machines;
+                    projects = merged.projects;
+                    persons = merged.persons;
+                    inspections = merged.inspections;
+                    
+                    saveData();
+                    renderMachineList();
+                    renderProjectList();
+                    renderPersonList();
+                    updateAllSelects();
+                    
+                    alert(`✅ ${files.length}個のファイルを結合しました！\n\n` +
+                        `機械: ${merged.machines.length}件\n` +
+                        `工事: ${merged.projects.length}件\n` +
+                        `担当者: ${merged.persons.length}件\n` +
+                        `点検記録: ${merged.inspections.length}件`);
+                }
+                
+            } catch (error) {
+                alert('❌ ファイルの結合に失敗しました。\n正しいJSON形式のファイルを選択してください。');
+                console.error('結合エラー:', error);
+            }
+        };
+        
+        input.click();
+    }
 
-        // ページ読み込み時に初期化
-        window.onload = init;
-    </script>
+    // ファイルをテキストとして読み込む（Promise版）
+    function readFileAsText(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = (e) => resolve(e.target.result);
+            reader.onerror = (e) => reject(e);
+            reader.readAsText(file);
+        });
+    }
+
+    // 複数のデータを結合
+    function mergeMultipleData(dataList) {
+        // 現在のデータから開始
+        let mergedMachines = [...machines];
+        let mergedProjects = [...projects];
+        let mergedPersons = [...persons];
+        let mergedInspections = [...inspections];
+        
+        // 各ファイルのデータを結合
+        dataList.forEach(item => {
+            const data = item.data;
+            
+            // 機械を結合（IDが重複しない場合のみ追加）
+            if (data.machines) {
+                data.machines.forEach(machine => {
+                    if (!mergedMachines.find(m => m.id === machine.id)) {
+                        mergedMachines.push(machine);
+                    }
+                });
+            }
+            
+            // 工事を結合
+            if (data.projects) {
+                data.projects.forEach(project => {
+                    if (!mergedProjects.find(p => p.id === project.id)) {
+                        mergedProjects.push(project);
+                    }
+                });
+            }
+            
+            // 担当者を結合
+            if (data.persons) {
+                data.persons.forEach(person => {
+                    if (!mergedPersons.find(p => p.id === person.id)) {
+                        mergedPersons.push(person);
+                    }
+                });
+            }
+            
+            // 点検記録を結合（同じ日付・機械・工事の場合は新しい方を優先）
+            if (data.inspections) {
+                data.inspections.forEach(inspection => {
+                    const existingIndex = mergedInspections.findIndex(i => 
+                        i.projectId === inspection.projectId && 
+                        i.machineId === inspection.machineId && 
+                        i.date === inspection.date
+                    );
+                    
+                    if (existingIndex === -1) {
+                        // 新しい記録として追加
+                        mergedInspections.push(inspection);
+                    } else {
+                        // 既存の記録がある場合、新しい方を採用
+                        const existing = mergedInspections[existingIndex];
+                        const existingTime = new Date(existing.createdAt || 0);
+                        const newTime = new Date(inspection.createdAt || 0);
+                        
+                        if (newTime > existingTime) {
+                            mergedInspections[existingIndex] = inspection;
+                        }
+                    }
+                });
+            }
+        });
+        
+        return {
+            machines: mergedMachines,
+            projects: mergedProjects,
+            persons: mergedPersons,
+            inspections: mergedInspections
+        };
+    }
+
+
+    // 全データ削除
+    function clearAllData() {
+        if (!confirm('すべてのデータを削除してもよろしいですか？\nこの操作は取り消せません。')) return;
+        if (!confirm('本当に削除しますか？\nすべてのマスターと点検記録が削除されます。')) return;
+        
+        machines = [];
+        projects = [];
+        persons = [];
+        inspections = [];
+        saveData();
+        
+        renderMachineList();
+        renderProjectList();
+        renderPersonList();
+        updateAllSelects();
+        document.getElementById('reportContainer').innerHTML = '';
+        
+        alert('✅ すべてのデータを削除しました。');
+    }
+
+    // 月次レポートの生成
+    function generateReport() {
+        const projectId = document.getElementById('reportProject').value;
+        const machineId = document.getElementById('reportMachine').value;
+        const year = parseInt(document.getElementById('reportYear').value);
+        const month = parseInt(document.getElementById('reportMonth').value);
+        
+        const container = document.getElementById('reportContainer');
+        
+        if (machines.length === 0 || projects.length === 0) {
+            container.innerHTML = '<div class="alert alert-info">機械または工事が登録されていません。</div>';
+            return;
+        }
+        
+        const targetProjects = projectId ? projects.filter(p => p.id === projectId) : projects;
+        const targetMachines = machineId ? machines.filter(m => m.id === machineId) : machines;
+        
+        container.innerHTML = '';
+        
+        targetProjects.forEach(project => {
+            targetMachines.forEach(machine => {
+                const monthInspections = inspections.filter(i => {
+                    if (i.projectId !== project.id || i.machineId !== machine.id) return false;
+                    const inspDate = new Date(i.date);
+                    return inspDate.getFullYear() === year && inspDate.getMonth() + 1 === month;
+                });
+                
+                if (monthInspections.length === 0 && (projectId || machineId)) {
+                    // フィルタ指定時はデータがなくても表示
+                } else if (monthInspections.length === 0) {
+                    return;
+                }
+                
+                const daysInMonth = new Date(year, month, 0).getDate();
+                const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+                const halfDayIndex = Math.ceil(daysInMonth / 2);
+                
+                const page = document.createElement('div');
+                page.className = 'report-page';
+                page.innerHTML = `
+                    <div class="report-title">建設機械使用前点検記録</div>
+                    
+                    <table class="report-info-table">
+                        <tr>
+                            <td class="label">工事名</td>
+                            <td colspan="3">${project.name}</td>
+                            <td class="label">請負者名称</td>
+                            <td>${project.contractor}</td>
+                        </tr>
+                        <tr>
+                            <td class="label">工事箇所</td>
+                            <td colspan="3">${project.location}</td>
+                            <td class="label">対象年月</td>
+                            <td>${year}年${month}月</td>
+                        </tr>
+                    </table>
+                    
+                    <table class="report-info-table" style="margin-bottom: 30px;">
+                        <tr>
+                            <td class="label">機械名称</td>
+                            <td colspan="5">${machine.name} (${machine.class})</td>
+                        </tr>
+                    </table>
+                    
+                    <table class="report-main-table">
+                        <thead>
+                            <tr>
+                                <th rowspan="2" width="60">大分類</th>
+                                <th rowspan="2" width="80">中分類</th>
+                                <th rowspan="2" width="180">点検項目</th>
+                                <th colspan="${halfDayIndex}">上半期</th>
+                                <th colspan="${daysInMonth - halfDayIndex}">下半期</th>
+                            </tr>
+                            <tr>
+                                ${days.slice(0, halfDayIndex).map(d => `<th class="day-cell">${d}</th>`).join('')}
+                                ${days.slice(halfDayIndex).map(d => `<th class="day-cell">${d}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${generateInspectionRows(monthInspections, year, month, daysInMonth)}
+                        </tbody>
+                    </table>
+                    
+                    <div class="report-footer">
+                        <div class="sign-row">
+                            <strong>確認サイン</strong>
+                        </div>
+                        <p>× があった場合は是正報告を書く</p>
+                        <p>是正処置報告書を書く</p>
+                        <p><strong>○は、何も変わりなし　　×は、改善の処置が必要</strong></p>
+                    </div>
+                `;
+                
+                container.appendChild(page);
+            });
+        });
+    }
+
+    function generateInspectionRows(monthInspections, year, month, daysInMonth) {
+        const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+        
+        let html = '';
+        inspectionItems.forEach(category => {
+            category.items.forEach((item, itemIndex) => {
+                const isFirstInCategory = itemIndex === 0;
+                const key = `${category.category}_${itemIndex}`;
+                
+                html += '<tr>';
+                
+                if (isFirstInCategory) {
+                    html += `<td rowspan="${category.items.length}" class="category-cell">${category.category}</td>`;
+                }
+                
+                html += `<td class="subcategory-cell">${item.subCategory}</td>`;
+                html += `<td class="item-cell">${item.item}<br><small>${item.description}</small></td>`;
+                
+                days.forEach(day => {
+                    const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const inspection = monthInspections.find(i => i.date === dateStr);
+                    const value = inspection?.results[key] || '';
+                    const statusClass = value === '○' ? 'status-ok' : value === '×' ? 'status-ng' : '';
+                    html += `<td class="${statusClass}">${value}</td>`;
+                });
+                
+                html += '</tr>';
+            });
+        });
+        
+        // 担当者行を追加
+        html += '<tr style="background: #fffacd;">';
+        html += '<td colspan="3" class="subcategory-cell" style="text-align: center; font-weight: bold;">担当者</td>';
+        days.forEach(day => {
+            const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const inspection = monthInspections.find(i => i.date === dateStr);
+            let personName = '';
+            if (inspection && inspection.personId) {
+                const person = persons.find(p => p.id === inspection.personId);
+                personName = person ? person.name : '';
+            }
+            html += `<td style="font-size: 10px; padding: 4px 2px;">${personName}</td>`;
+        });
+        html += '</tr>';
+        
+        return html;
+    }
+
+    // タブ切り替え
+    function switchTab(index) {
+        document.querySelectorAll('.tab').forEach((tab, i) => {
+            tab.classList.toggle('active', i === index);
+        });
+        
+        document.querySelectorAll('.tab-content').forEach((content, i) => {
+            content.classList.toggle('active', i === index);
+        });
+        
+        if (index === 4) {
+            generateReport();
+        }
+    }
+
+    // ページ読み込み時に初期化
+    window.onload = init;
+</script>
+```
+
 </body>
 </html>
