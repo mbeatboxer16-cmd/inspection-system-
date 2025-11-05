@@ -920,6 +920,12 @@
 
                 <div class="section">
                     <h2>点検項目</h2>
+                    <div style="margin-bottom: 15px;">
+                        <button class="btn btn-success" onclick="setAllChecks('○')">✅ 全て○にする</button>
+                        <button class="btn btn-danger" onclick="setAllChecks('×')">❌ 全て×にする</button>
+                        <button class="btn btn-warning" onclick="setAllChecks('－')">➖ 全て－にする</button>
+                        <button class="btn btn-secondary" onclick="setAllChecks('')">🔄 全てクリア</button>
+                    </div>
                     <div class="inspection-form" id="inspectionItems"></div>
                     <button class="btn" onclick="saveInspection()">💾 点検結果を保存</button>
                     <button class="btn btn-secondary" onclick="clearInspectionForm()">🔄 フォームをクリア</button>
@@ -1489,6 +1495,27 @@
             select.value = '';
         });
     }
+
+    // 全ての点検項目を一括設定
+    function setAllChecks(value) {
+        const selectElements = document.querySelectorAll('[id^="check_"]');
+        let count = 0;
+        
+        selectElements.forEach(select => {
+            select.value = value;
+            count++;
+        });
+        
+        const valueText = {
+            '○': '○ (良好)',
+            '×': '× (不良)',
+            '－': '－ (該当なし)',
+            '': 'クリア'
+        };
+        
+        alert(`✅ ${count}項目を「${valueText[value]}」に設定しました！`);
+    }
+
 
     // データエクスポート
     function exportData() {
