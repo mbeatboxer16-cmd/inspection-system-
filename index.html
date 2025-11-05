@@ -584,6 +584,210 @@
             background: #f8d7da;
             color: #721c24;
         }
+
+        /* ========================================
+           スマホ縦画面対応（768px以下）
+           ======================================== */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            .header h1 {
+                font-size: 22px;
+            }
+
+            .header p {
+                font-size: 13px;
+            }
+
+            /* タブを大きく、タップしやすく */
+            .tab {
+                min-width: 120px;
+                padding: 16px 10px;
+                font-size: 14px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .section {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+
+            .section h2 {
+                font-size: 18px;
+            }
+
+            /* フォーム要素を大きく */
+            .form-group label {
+                font-size: 15px;
+                margin-bottom: 10px;
+            }
+
+            .form-group input,
+            .form-group select,
+            .form-group textarea {
+                padding: 14px;
+                font-size: 16px;
+                min-height: 48px;
+            }
+
+            .form-group textarea {
+                min-height: 100px;
+            }
+
+            /* ボタンを大きく、タップしやすく */
+            .btn {
+                padding: 16px 24px;
+                font-size: 16px;
+                min-height: 50px;
+                width: 100%;
+                margin-right: 0;
+                margin-bottom: 12px;
+            }
+
+            .btn-small {
+                padding: 12px 18px;
+                font-size: 15px;
+                min-height: 44px;
+                width: auto;
+            }
+
+            /* マスターリストの表示を改善 */
+            .master-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 12px;
+            }
+
+            .master-info {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            .master-info strong {
+                font-size: 16px;
+                display: block;
+                margin-bottom: 5px;
+            }
+
+            .master-info span {
+                margin-left: 0;
+                display: block;
+                margin-top: 5px;
+            }
+
+            /* 点検フォームを縦並びに */
+            .inspection-item {
+                grid-template-columns: 1fr;
+                gap: 10px;
+                padding: 15px;
+            }
+
+            .inspection-item label {
+                font-size: 16px;
+            }
+
+            .inspection-item .check-description {
+                font-size: 14px;
+                margin-top: 5px;
+            }
+
+            .inspection-item select {
+                padding: 14px;
+                font-size: 16px;
+                min-height: 48px;
+            }
+
+            /* テーブルをスクロール可能に */
+            .report-info-table {
+                font-size: 14px;
+            }
+
+            .report-info-table td {
+                padding: 10px 8px;
+            }
+
+            /* 点検項目のカテゴリー */
+            .inspection-category h3 {
+                font-size: 16px;
+                padding: 12px 10px;
+            }
+
+            /* 印刷ボタンエリア */
+            .print-controls {
+                flex-direction: column;
+            }
+
+            .print-controls button {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+
+            /* ヘッダーの余白調整 */
+            .user-info {
+                padding: 8px 15px;
+                font-size: 14px;
+            }
+
+            /* 検索・フィルターエリア */
+            .search-container {
+                flex-direction: column;
+            }
+
+            .search-container input,
+            .search-container select {
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+
+        /* スマホ縦画面（小さい画面）追加対応 */
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 20px;
+            }
+
+            .tab {
+                min-width: 100px;
+                padding: 14px 8px;
+                font-size: 13px;
+            }
+
+            .section h2 {
+                font-size: 16px;
+            }
+
+            .btn {
+                font-size: 15px;
+                padding: 14px 20px;
+            }
+
+            .inspection-item label {
+                font-size: 15px;
+            }
+
+            .master-info strong {
+                font-size: 15px;
+            }
+        }
+
+        /* 横画面の場合の注意表示 */
+        @media (max-width: 768px) and (orientation: portrait) {
+            .orientation-tip {
+                background: #fff3cd;
+                border: 2px solid #ffc107;
+                padding: 12px;
+                margin: 10px 0;
+                border-radius: 8px;
+                text-align: center;
+                font-size: 14px;
+                color: #856404;
+            }
+        }
     </style>
 </head>
 <body>
