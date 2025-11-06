@@ -4,15 +4,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>建設機械使用前点検記録システム（共有版）</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="建設機械点検">
+    <link rel="manifest" href="manifest.json">
+    <title>建設機械使用前点検記録システム（改善版）</title>
 
 ```
+<!-- SheetJS for Excel export -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
     body {
         font-family: 'Meiryo', 'MS Gothic', sans-serif;
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -34,6 +43,7 @@
         color: white;
         padding: 30px;
         text-align: center;
+        position: relative;
     }
 
     .header h1 {
@@ -46,12 +56,51 @@
         opacity: 0.9;
     }
 
-    .user-info {
+    .pwa-install-banner {
         background: rgba(255,255,255,0.2);
-        padding: 10px 20px;
+        padding: 12px 20px;
         border-radius: 10px;
         margin-top: 15px;
-        display: inline-block;
+        display: none;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .pwa-install-banner.show {
+        display: flex;
+    }
+
+    .pwa-install-btn {
+        background: white;
+        color: #667eea;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .backup-status {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(255,255,255,0.2);
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .backup-status.success {
+        background: rgba(76, 175, 80, 0.3);
+    }
+
+    .backup-status.warning {
+        background: rgba(255, 152, 0, 0.3);
     }
 
     .tabs {
@@ -183,6 +232,10 @@
         background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
     }
 
+    .btn-excel {
+        background: linear-gradient(135deg, #1e7e34 0%, #28a745 100%);
+    }
+
     .btn-small {
         padding: 8px 15px;
         font-size: 14px;
@@ -275,6 +328,13 @@
         page-break-after: always;
         background: white;
         padding: 20px;
+        margin-bottom: 30px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+    }
+
+    .report-page:last-child {
+        page-break-after: auto;
     }
 
     .report-title {
@@ -378,6 +438,58 @@
         padding-top: 10px;
     }
 
+    /* スワイプナビゲーション */
+    .swipe-navigation {
+        position: fixed;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(102, 126, 234, 0.95);
+        padding: 15px 25px;
+        border-radius: 50px;
+        display: none;
+        align-items: center;
+        gap: 20px;
+        z-index: 1000;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    }
+
+    .swipe-navigation.show {
+        display: flex;
+    }
+
+    .swipe-btn {
+        background: white;
+        color: #667eea;
+        border: none;
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        font-size: 20px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s;
+    }
+
+    .swipe-btn:hover {
+        transform: scale(1.1);
+    }
+
+    .swipe-btn:disabled {
+        opacity: 0.3;
+        cursor: not-allowed;
+    }
+
+    .swipe-info {
+        color: white;
+        font-weight: bold;
+        font-size: 16px;
+        min-width: 80px;
+        text-align: center;
+    }
+
     @media print {
         body {
             background: white;
@@ -393,12 +505,24 @@
         .header,
         .tabs,
         .btn,
-        .no-print {
+        .no-print,
+        .swipe-navigation {
             display: none !important;
         }
 
         .content {
             padding: 0;
+        }
+
+        .report-page {
+            margin-bottom: 0;
+            border: none;
+            border-radius: 0;
+            page-break-after: always;
+        }
+
+        .report-page:last-child {
+            page-break-after: auto;
         }
 
         .report-main-table {
@@ -408,12 +532,6 @@
         .report-main-table th,
         .report-main-table td {
             padding: 3px 2px;
-        }
-
-        .report-page {
-            padding: 10mm;
-            transform: none !important;
-            width: 100% !important;
         }
     }
 
@@ -490,57 +608,6 @@
         text-align: right;
     }
 
-    .login-container {
-        max-width: 450px;
-        margin: 50px auto;
-        background: white;
-        padding: 40px;
-        border-radius: 15px;
-        box-shadow: 0 10px 40px rgba(0,0,0,0.2);
-    }
-
-    .login-header {
-        text-align: center;
-        margin-bottom: 30px;
-    }
-
-    .login-header h2 {
-        color: #667eea;
-        font-size: 28px;
-        margin-bottom: 10px;
-    }
-
-    .login-tabs {
-        display: flex;
-        margin-bottom: 30px;
-        border-bottom: 2px solid #e0e0e0;
-    }
-
-    .login-tab {
-        flex: 1;
-        padding: 15px;
-        text-align: center;
-        cursor: pointer;
-        border: none;
-        background: none;
-        font-size: 16px;
-        color: #666;
-        transition: all 0.3s;
-    }
-
-    .login-tab.active {
-        color: #667eea;
-        border-bottom: 3px solid #667eea;
-    }
-
-    .login-form {
-        display: none;
-    }
-
-    .login-form.active {
-        display: block;
-    }
-
     .loading {
         text-align: center;
         padding: 50px;
@@ -562,36 +629,7 @@
         100% { transform: rotate(360deg); }
     }
 
-    .sync-status {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        background: white;
-        padding: 10px 20px;
-        border-radius: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        font-size: 14px;
-        z-index: 999;
-    }
-
-    .sync-status.syncing {
-        background: #fff3cd;
-        color: #856404;
-    }
-
-    .sync-status.synced {
-        background: #d4edda;
-        color: #155724;
-    }
-
-    .sync-status.error {
-        background: #f8d7da;
-        color: #721c24;
-    }
-
-    /* ========================================
-       スマホ縦画面対応（768px以下）
-       ======================================== */
+    /* スマホ対応 */
     @media (max-width: 768px) {
         body {
             padding: 10px;
@@ -605,7 +643,6 @@
             font-size: 13px;
         }
 
-        /* タブを大きく、タップしやすく */
         .tab {
             min-width: 120px;
             padding: 16px 10px;
@@ -625,7 +662,6 @@
             font-size: 18px;
         }
 
-        /* フォーム要素を大きく */
         .form-group label {
             font-size: 15px;
             margin-bottom: 10px;
@@ -643,7 +679,6 @@
             min-height: 100px;
         }
 
-        /* ボタンを大きく、タップしやすく */
         .btn {
             padding: 16px 24px;
             font-size: 16px;
@@ -660,7 +695,6 @@
             width: auto;
         }
 
-        /* マスターリストの表示を改善 */
         .master-item {
             flex-direction: column;
             align-items: flex-start;
@@ -684,7 +718,6 @@
             margin-top: 5px;
         }
 
-        /* 点検フォームを縦並びに */
         .inspection-item {
             grid-template-columns: 1fr;
             gap: 10px;
@@ -706,7 +739,6 @@
             min-height: 48px;
         }
 
-        /* テーブルをスクロール可能に */
         .report-info-table {
             font-size: 14px;
         }
@@ -715,41 +747,35 @@
             padding: 10px 8px;
         }
 
-        /* 点検項目のカテゴリー */
         .inspection-category h3 {
             font-size: 16px;
             padding: 12px 10px;
         }
 
-        /* 印刷ボタンエリア */
-        .print-controls {
-            flex-direction: column;
+        .report-page {
+            transform: scale(0.35);
+            transform-origin: top left;
+            width: 285%;
+            margin-bottom: 20px;
         }
 
-        .print-controls button {
-            width: 100%;
-            margin-bottom: 10px;
+        .swipe-navigation {
+            bottom: 80px;
+            padding: 12px 20px;
         }
 
-        /* ヘッダーの余白調整 */
-        .user-info {
-            padding: 8px 15px;
+        .swipe-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 18px;
+        }
+
+        .swipe-info {
             font-size: 14px;
-        }
-
-        /* 検索・フィルターエリア */
-        .search-container {
-            flex-direction: column;
-        }
-
-        .search-container input,
-        .search-container select {
-            width: 100%;
-            margin-bottom: 10px;
+            min-width: 60px;
         }
     }
 
-    /* スマホ縦画面（小さい画面）追加対応 */
     @media (max-width: 480px) {
         .header h1 {
             font-size: 20px;
@@ -777,109 +803,29 @@
         .master-info strong {
             font-size: 15px;
         }
-
-        /* 月次点検簿のスマホ表示 */
-        .report-page {
-            transform: scale(0.4);
-            transform-origin: top left;
-            width: 250%;
-            margin-bottom: 20px;
-            border: 2px solid #667eea;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-
-        /* スマホ用ナビゲーション */
-        .mobile-report-nav {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 15px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            position: sticky;
-            top: 10px;
-            z-index: 100;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-
-        .mobile-nav-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .mobile-nav-btn {
-            background: white;
-            color: #667eea;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s;
-            min-width: 90px;
-        }
-
-        .mobile-nav-btn:active {
-            transform: scale(0.95);
-            background: #f0f0f0;
-        }
-
-        .mobile-nav-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        .mobile-page-info {
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            text-align: center;
-            min-width: 80px;
-        }
-
-        .mobile-zoom-info {
-            color: white;
-            text-align: center;
-            margin-top: 10px;
-            font-size: 13px;
-            opacity: 0.9;
-        }
-
-        /* レポートコンテナの調整 */
-        #reportContainer {
-            overflow-x: hidden;
-        }
-    }
-
-    /* 横画面の場合の注意表示 */
-    @media (max-width: 768px) and (orientation: portrait) {
-        .orientation-tip {
-            background: #fff3cd;
-            border: 2px solid #ffc107;
-            padding: 12px;
-            margin: 10px 0;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 14px;
-            color: #856404;
-        }
     }
 </style>
 ```
 
 </head>
 <body>
-    <!-- メインアプリケーション -->
     <div id="mainApp">
         <div class="container">
             <div class="header">
-                <h1>🚜 建設機械使用前点検記録システム</h1>
-                <p>機械の日々の点検を簡単に記録・管理できます</p>
-            </div>
+                <div class="backup-status" id="backupStatus">
+                    💾 バックアップ待機中
+                </div>
 
 ```
+            <h1>🚜 建設機械使用前点検記録システム</h1>
+            <p>機械の日々の点検を簡単に記録・管理できます（改善版 v2.0）</p>
+            
+            <div class="pwa-install-banner" id="pwaInstallBanner">
+                <span>📱 ホーム画面に追加してアプリのように使えます！</span>
+                <button class="pwa-install-btn" id="pwaInstallBtn">追加する</button>
+            </div>
+        </div>
+
         <div class="tabs">
             <button class="tab active" onclick="switchTab(0)">🔧 機械マスター</button>
             <button class="tab" onclick="switchTab(1)">🏗️ 工事マスター</button>
@@ -1048,9 +994,11 @@
                         </div>
                     </div>
                     <button class="btn btn-success" onclick="window.print()">🖨️ 印刷する</button>
+                    <button class="btn btn-excel" onclick="exportToExcel()">📊 Excelで出力</button>
                     <button class="btn btn-secondary" onclick="exportData()">📥 データをダウンロード</button>
                     <button class="btn btn-warning" onclick="importData()">📤 データを読み込む（上書き）</button>
                     <button class="btn" style="background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);" onclick="mergeData()">🔄 データを結合</button>
+                    <button class="btn" style="background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%);" onclick="manualBackup()">💾 手動バックアップ</button>
                     <button class="btn btn-danger" onclick="clearAllData()">🗑️ 全データ削除</button>
                 </div>
 
@@ -1058,6 +1006,16 @@
             </div>
         </div>
     </div>
+</div>
+
+<!-- スワイプナビゲーション -->
+<div class="swipe-navigation" id="swipeNavigation">
+    <button class="swipe-btn" id="prevPageBtn" onclick="changePage(-1)">◀</button>
+    <div class="swipe-info">
+        <span id="currentPageNum">1</span> / <span id="totalPageNum">1</span>
+    </div>
+    <button class="swipe-btn" id="nextPageBtn" onclick="changePage(1)">▶</button>
+</div>
 
 <!-- 編集モーダル -->
 <div id="editModal" class="modal">
@@ -1127,12 +1085,21 @@
     let inspections = [];
     let currentEditType = '';
     let currentEditId = '';
+    let currentPage = 0;
+    let totalPages = 0;
+
+    // PWA関連
+    let deferredPrompt;
 
     // 初期化
     function init() {
         document.getElementById('mainApp').style.display = 'block';
         loadData();
         initApp();
+        initPWA();
+        initAutoBackup();
+        initSwipeGestures();
+        checkBackupStatus();
     }
 
     // データの読み込み
@@ -1149,6 +1116,7 @@
         localStorage.setItem('projects', JSON.stringify(projects));
         localStorage.setItem('persons', JSON.stringify(persons));
         localStorage.setItem('inspections', JSON.stringify(inspections));
+        localStorage.setItem('lastSaveTime', new Date().toISOString());
     }
 
     // アプリ初期化
@@ -1165,6 +1133,180 @@
         const now = new Date();
         document.getElementById('reportYear').value = now.getFullYear();
         document.getElementById('reportMonth').value = now.getMonth() + 1;
+    }
+
+    // PWA初期化
+    function initPWA() {
+        // Service Worker登録
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(reg => console.log('Service Worker登録成功'))
+                .catch(err => console.log('Service Worker登録失敗:', err));
+        }
+
+        // インストールプロンプト
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('pwaInstallBanner').classList.add('show');
+        });
+
+        document.getElementById('pwaInstallBtn').addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            if (outcome === 'accepted') {
+                document.getElementById('pwaInstallBanner').classList.remove('show');
+            }
+            
+            deferredPrompt = null;
+        });
+
+        // インストール済みの場合
+        window.addEventListener('appinstalled', () => {
+            document.getElementById('pwaInstallBanner').classList.remove('show');
+        });
+    }
+
+    // 自動バックアップ初期化
+    function initAutoBackup() {
+        // 1日1回自動バックアップ
+        const lastBackup = localStorage.getItem('lastBackupTime');
+        const now = new Date().getTime();
+        
+        if (!lastBackup || (now - new Date(lastBackup).getTime()) > 24 * 60 * 60 * 1000) {
+            performAutoBackup();
+        }
+
+        // 24時間ごとにチェック
+        setInterval(() => {
+            const lastBackup = localStorage.getItem('lastBackupTime');
+            const now = new Date().getTime();
+            
+            if (!lastBackup || (now - new Date(lastBackup).getTime()) > 24 * 60 * 60 * 1000) {
+                performAutoBackup();
+            }
+        }, 60 * 60 * 1000); // 1時間ごとにチェック
+    }
+
+    // 自動バックアップ実行
+    function performAutoBackup() {
+        const data = {
+            machines: machines,
+            projects: projects,
+            persons: persons,
+            inspections: inspections,
+            exportDate: new Date().toISOString()
+        };
+        
+        localStorage.setItem('autoBackup', JSON.stringify(data));
+        localStorage.setItem('lastBackupTime', new Date().toISOString());
+        
+        updateBackupStatus('success', '自動バックアップ完了');
+    }
+
+    // 手動バックアップ
+    function manualBackup() {
+        performAutoBackup();
+        exportData();
+        alert('✅ 手動バックアップを実行しました！\nデータをダウンロードしました。');
+    }
+
+    // バックアップステータス確認
+    function checkBackupStatus() {
+        const lastBackup = localStorage.getItem('lastBackupTime');
+        
+        if (!lastBackup) {
+            updateBackupStatus('warning', 'バックアップ未実施');
+            return;
+        }
+        
+        const now = new Date().getTime();
+        const backupTime = new Date(lastBackup).getTime();
+        const daysSince = Math.floor((now - backupTime) / (24 * 60 * 60 * 1000));
+        
+        if (daysSince === 0) {
+            updateBackupStatus('success', '本日バックアップ済み');
+        } else if (daysSince < 7) {
+            updateBackupStatus('success', `${daysSince}日前にバックアップ`);
+        } else {
+            updateBackupStatus('warning', `${daysSince}日間バックアップなし`);
+        }
+    }
+
+    // バックアップステータス更新
+    function updateBackupStatus(type, message) {
+        const status = document.getElementById('backupStatus');
+        status.className = 'backup-status ' + type;
+        status.textContent = '💾 ' + message;
+    }
+
+    // スワイプジェスチャー初期化
+    function initSwipeGestures() {
+        let startX = 0;
+        let startY = 0;
+        let endX = 0;
+        let endY = 0;
+
+        const reportContainer = document.getElementById('reportContainer');
+
+        reportContainer.addEventListener('touchstart', (e) => {
+            startX = e.touches[0].clientX;
+            startY = e.touches[0].clientY;
+        }, { passive: true });
+
+        reportContainer.addEventListener('touchmove', (e) => {
+            endX = e.touches[0].clientX;
+            endY = e.touches[0].clientY;
+        }, { passive: true });
+
+        reportContainer.addEventListener('touchend', () => {
+            const deltaX = endX - startX;
+            const deltaY = endY - startY;
+
+            if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+                if (deltaX > 0) {
+                    changePage(-1);
+                } else {
+                    changePage(1);
+                }
+            }
+        }, { passive: true });
+    }
+
+    // ページ変更
+    function changePage(direction) {
+        currentPage += direction;
+        
+        if (currentPage < 0) currentPage = 0;
+        if (currentPage >= totalPages) currentPage = totalPages - 1;
+        
+        updatePageDisplay();
+    }
+
+    // ページ表示更新
+    function updatePageDisplay() {
+        const pages = document.querySelectorAll('.report-page');
+        
+        pages.forEach((page, index) => {
+            page.style.display = index === currentPage ? 'block' : 'none';
+        });
+        
+        document.getElementById('currentPageNum').textContent = currentPage + 1;
+        document.getElementById('totalPageNum').textContent = totalPages;
+        
+        document.getElementById('prevPageBtn').disabled = currentPage === 0;
+        document.getElementById('nextPageBtn').disabled = currentPage === totalPages - 1;
+        
+        // ナビゲーション表示
+        const nav = document.getElementById('swipeNavigation');
+        if (totalPages > 1) {
+            nav.classList.add('show');
+        } else {
+            nav.classList.remove('show');
+        }
     }
 
     // 機械を追加
@@ -1592,6 +1734,129 @@
         alert(`✅ ${count}項目を「${valueText[value]}」に設定しました！`);
     }
 
+    // Excelエクスポート
+    function exportToExcel() {
+        const projectId = document.getElementById('reportProject').value;
+        const machineId = document.getElementById('reportMachine').value;
+        const year = parseInt(document.getElementById('reportYear').value);
+        const month = parseInt(document.getElementById('reportMonth').value);
+        
+        if (machines.length === 0 || projects.length === 0) {
+            alert('❌ 機械または工事が登録されていません。');
+            return;
+        }
+        
+        const targetProjects = projectId ? projects.filter(p => p.id === projectId) : projects;
+        const targetMachines = machineId ? machines.filter(m => m.id === machineId) : machines;
+        
+        const workbook = XLSX.utils.book_new();
+        
+        targetProjects.forEach(project => {
+            targetMachines.forEach(machine => {
+                const monthInspections = inspections.filter(i => {
+                    if (i.projectId !== project.id || i.machineId !== machine.id) return false;
+                    const inspDate = new Date(i.date);
+                    return inspDate.getFullYear() === year && inspDate.getMonth() + 1 === month;
+                });
+                
+                if (monthInspections.length === 0 && !projectId && !machineId) return;
+                
+                const sheetData = generateExcelData(project, machine, year, month, monthInspections);
+                const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
+                
+                // 列幅設定
+                worksheet['!cols'] = [
+                    { wch: 10 },  // 大分類
+                    { wch: 12 },  // 中分類
+                    { wch: 30 },  // 点検項目
+                    ...Array(31).fill({ wch: 4 })  // 日付
+                ];
+                
+                const sheetName = `${machine.name.substring(0, 15)}_${month}月`;
+                XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
+            });
+        });
+        
+        const fileName = `点検記録_${year}年${month}月_${new Date().toISOString().split('T')[0]}.xlsx`;
+        XLSX.writeFile(workbook, fileName);
+        
+        alert('✅ Excelファイルをダウンロードしました！');
+    }
+
+    // Excel用データ生成
+    function generateExcelData(project, machine, year, month, monthInspections) {
+        const daysInMonth = new Date(year, month, 0).getDate();
+        const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+        
+        const data = [];
+        
+        // タイトル
+        data.push(['建設機械使用前点検記録']);
+        data.push([]);
+        
+        // 工事情報
+        data.push(['工事名', project.name, '', '', '請負者名称', project.contractor]);
+        data.push(['工事箇所', project.location, '', '', '対象年月', `${year}年${month}月`]);
+        data.push([]);
+        
+        // 機械情報
+        data.push(['機械名称', `${machine.name} (${machine.class})`]);
+        data.push([]);
+        
+        // ヘッダー
+        const header1 = ['大分類', '中分類', '点検項目'];
+        const halfDayIndex = Math.ceil(daysInMonth / 2);
+        header1.push(...Array(halfDayIndex).fill('上半期'));
+        header1.push(...Array(daysInMonth - halfDayIndex).fill('下半期'));
+        data.push(header1);
+        
+        const header2 = ['', '', ''];
+        header2.push(...days);
+        data.push(header2);
+        
+        // 点検項目
+        inspectionItems.forEach(category => {
+            category.items.forEach((item, itemIndex) => {
+                const row = [];
+                
+                if (itemIndex === 0) {
+                    row.push(category.category);
+                } else {
+                    row.push('');
+                }
+                
+                row.push(item.subCategory);
+                row.push(`${item.item}\n${item.description}`);
+                
+                const key = `${category.category}_${itemIndex}`;
+                
+                days.forEach(day => {
+                    const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                    const inspection = monthInspections.find(i => i.date === dateStr);
+                    const value = inspection?.results[key] || '';
+                    row.push(value);
+                });
+                
+                data.push(row);
+            });
+        });
+        
+        // 担当者行
+        const personRow = ['', '', '担当者'];
+        days.forEach(day => {
+            const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const inspection = monthInspections.find(i => i.date === dateStr);
+            let personName = '';
+            if (inspection && inspection.personId) {
+                const person = persons.find(p => p.id === inspection.personId);
+                personName = person ? person.name : '';
+            }
+            personRow.push(personName);
+        });
+        data.push(personRow);
+        
+        return data;
+    }
 
     // データエクスポート
     function exportData() {
@@ -1662,17 +1927,14 @@
         const input = document.createElement('input');
         input.type = 'file';
         input.accept = 'application/json';
-        input.multiple = true; // 複数ファイル選択可能
+        input.multiple = true;
         
         input.onchange = async (e) => {
             const files = Array.from(e.target.files);
             
-            if (files.length === 0) {
-                return;
-            }
+            if (files.length === 0) return;
             
             try {
-                // すべてのファイルを読み込む
                 const allData = [];
                 
                 for (const file of files) {
@@ -1684,10 +1946,8 @@
                     });
                 }
                 
-                // データを結合
                 const merged = mergeMultipleData(allData);
                 
-                // 結合結果を表示
                 const currentTotal = {
                     machines: machines.length,
                     projects: projects.length,
@@ -1706,8 +1966,7 @@
                     `工事: ${merged.projects.length}件 (+${merged.projects.length - currentTotal.projects}件)\n` +
                     `担当者: ${merged.persons.length}件 (+${merged.persons.length - currentTotal.persons}件)\n` +
                     `点検記録: ${merged.inspections.length}件 (+${merged.inspections.length - currentTotal.inspections}件)\n\n` +
-                    `※重複データは自動的に統合されます。\n` +
-                    `よろしいですか？`;
+                    `※重複データは自動的に統合されます。\nよろしいですか？`;
                 
                 if (confirm(confirmMessage)) {
                     machines = merged.machines;
@@ -1737,7 +1996,6 @@
         input.click();
     }
 
-    // ファイルをテキストとして読み込む（Promise版）
     function readFileAsText(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
@@ -1747,19 +2005,15 @@
         });
     }
 
-    // 複数のデータを結合
     function mergeMultipleData(dataList) {
-        // 現在のデータから開始
         let mergedMachines = [...machines];
         let mergedProjects = [...projects];
         let mergedPersons = [...persons];
         let mergedInspections = [...inspections];
         
-        // 各ファイルのデータを結合
         dataList.forEach(item => {
             const data = item.data;
             
-            // 機械を結合（IDが重複しない場合のみ追加）
             if (data.machines) {
                 data.machines.forEach(machine => {
                     if (!mergedMachines.find(m => m.id === machine.id)) {
@@ -1768,7 +2022,6 @@
                 });
             }
             
-            // 工事を結合
             if (data.projects) {
                 data.projects.forEach(project => {
                     if (!mergedProjects.find(p => p.id === project.id)) {
@@ -1777,7 +2030,6 @@
                 });
             }
             
-            // 担当者を結合
             if (data.persons) {
                 data.persons.forEach(person => {
                     if (!mergedPersons.find(p => p.id === person.id)) {
@@ -1786,7 +2038,6 @@
                 });
             }
             
-            // 点検記録を結合（同じ日付・機械・工事の場合は新しい方を優先）
             if (data.inspections) {
                 data.inspections.forEach(inspection => {
                     const existingIndex = mergedInspections.findIndex(i => 
@@ -1796,10 +2047,8 @@
                     );
                     
                     if (existingIndex === -1) {
-                        // 新しい記録として追加
                         mergedInspections.push(inspection);
                     } else {
-                        // 既存の記録がある場合、新しい方を採用
                         const existing = mergedInspections[existingIndex];
                         const existingTime = new Date(existing.createdAt || 0);
                         const newTime = new Date(inspection.createdAt || 0);
@@ -1819,7 +2068,6 @@
             inspections: mergedInspections
         };
     }
-
 
     // 全データ削除
     function clearAllData() {
@@ -1870,11 +2118,7 @@
                     return inspDate.getFullYear() === year && inspDate.getMonth() + 1 === month;
                 });
                 
-                if (monthInspections.length === 0 && (projectId || machineId)) {
-                    // フィルタ指定時はデータがなくても表示
-                } else if (monthInspections.length === 0) {
-                    return;
-                }
+                if (monthInspections.length === 0 && !projectId && !machineId) return;
                 
                 const daysInMonth = new Date(year, month, 0).getDate();
                 const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
@@ -1882,8 +2126,6 @@
                 
                 const page = document.createElement('div');
                 page.className = 'report-page';
-                page.setAttribute('data-page-index', pageIndex);
-                pageIndex++;
                 
                 page.innerHTML = `
                     <div class="report-title">建設機械使用前点検記録</div>
@@ -1940,14 +2182,13 @@
                 `;
                 
                 container.appendChild(page);
+                pageIndex++;
             });
         });
         
-        // スマホ用ナビゲーションを追加
-        if (pageIndex > 0) {
-            addMobileNavigation(pageIndex);
-            initializeMobileView();
-        }
+        totalPages = pageIndex;
+        currentPage = 0;
+        updatePageDisplay();
     }
 
     function generateInspectionRows(monthInspections, year, month, daysInMonth) {
@@ -1980,7 +2221,7 @@
             });
         });
         
-        // 担当者行を追加
+        // 担当者行
         html += '<tr style="background: #fffacd;">';
         html += '<td colspan="3" class="subcategory-cell" style="text-align: center; font-weight: bold;">担当者</td>';
         days.forEach(day => {
@@ -1997,97 +2238,6 @@
         
         return html;
     }
-
-    // スマホ用ナビゲーション
-    let currentMobilePage = 0;
-    
-    function addMobileNavigation(totalPages) {
-        const container = document.getElementById('reportContainer');
-        const nav = document.createElement('div');
-        nav.id = 'mobileReportNav';
-        nav.className = 'mobile-report-nav no-print';
-        nav.innerHTML = `
-            <div class="mobile-nav-content">
-                <button class="mobile-nav-btn" id="prevPageBtn" onclick="changeMobilePage(-1)">
-                    ◀️ 前へ
-                </button>
-                <div class="mobile-page-info">
-                    <span id="currentPageNum">1</span> / <span id="totalPageNum">${totalPages}</span>
-                </div>
-                <button class="mobile-nav-btn" id="nextPageBtn" onclick="changeMobilePage(1)">
-                    次へ ▶️
-                </button>
-            </div>
-            <div class="mobile-zoom-info">
-                📱 ピンチで拡大できます
-            </div>
-        `;
-        container.insertBefore(nav, container.firstChild);
-    }
-    
-    function initializeMobileView() {
-        currentMobilePage = 0;
-        updateMobilePageDisplay(false); // スクロールしない
-    }
-    
-    function changeMobilePage(direction) {
-        const pages = document.querySelectorAll('.report-page');
-        const totalPages = pages.length;
-        
-        currentMobilePage += direction;
-        
-        if (currentMobilePage < 0) {
-            currentMobilePage = 0;
-        } else if (currentMobilePage >= totalPages) {
-            currentMobilePage = totalPages - 1;
-        }
-        
-        updateMobilePageDisplay(true); // ページ切り替え時のみスクロール
-    }
-    
-    function updateMobilePageDisplay(shouldScroll = false) {
-        const pages = document.querySelectorAll('.report-page');
-        const totalPages = pages.length;
-        
-        pages.forEach((page, index) => {
-            if (window.innerWidth <= 768) {
-                // スマホ表示：現在のページのみ表示
-                page.style.display = index === currentMobilePage ? 'block' : 'none';
-            } else {
-                // PC表示：すべて表示
-                page.style.display = 'block';
-            }
-        });
-        
-        // ページ番号更新
-        const currentPageNum = document.getElementById('currentPageNum');
-        const totalPageNum = document.getElementById('totalPageNum');
-        const prevBtn = document.getElementById('prevPageBtn');
-        const nextBtn = document.getElementById('nextPageBtn');
-        
-        if (currentPageNum) currentPageNum.textContent = currentMobilePage + 1;
-        if (totalPageNum) totalPageNum.textContent = totalPages;
-        
-        // ボタンの有効/無効
-        if (prevBtn) prevBtn.disabled = currentMobilePage === 0;
-        if (nextBtn) nextBtn.disabled = currentMobilePage === totalPages - 1;
-        
-        // ページ切り替え時のみスクロール
-        if (shouldScroll) {
-            const nav = document.getElementById('mobileReportNav');
-            if (nav && window.innerWidth <= 768) {
-                nav.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }
-        }
-    }
-    
-    // ウィンドウリサイズ時に表示を更新
-    window.addEventListener('resize', function() {
-        if (document.querySelectorAll('.report-page').length > 0) {
-            updateMobilePageDisplay();
-        }
-    });
-
 
     // タブ切り替え
     function switchTab(index) {
