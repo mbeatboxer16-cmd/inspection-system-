@@ -373,21 +373,21 @@
     .report-main-table {
         width: 100%;
         border-collapse: collapse;
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .report-main-table th,
     .report-main-table td {
         border: 1px solid #333;
-        padding: 6px 4px;
+        padding: 7px 5px;
         text-align: center;
-        line-height: 1.3;
+        line-height: 1.4;
     }
 
     .report-main-table th {
         background: #e0e0e0;
         font-weight: bold;
-        font-size: 12px;
+        font-size: 13px;
     }
 
     .report-main-table .category-cell {
@@ -397,7 +397,7 @@
         vertical-align: middle;
         writing-mode: vertical-rl;
         text-orientation: upright;
-        font-size: 13px;
+        font-size: 15px;
     }
 
     .report-main-table .subcategory-cell {
@@ -405,19 +405,19 @@
         font-weight: bold;
         text-align: center;
         vertical-align: middle;
-        font-size: 11px;
+        font-size: 12px;
     }
 
     .report-main-table .item-cell {
         text-align: left;
         padding-left: 10px;
-        font-size: 10.5px;
-        line-height: 1.4;
+        font-size: 11.5px;
+        line-height: 1.5;
     }
 
     .report-main-table .day-cell {
         width: 30px;
-        font-size: 15px;
+        font-size: 16px;
         font-weight: bold;
     }
 
@@ -425,14 +425,14 @@
         background: #d4edda;
         color: #155724;
         font-weight: bold;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .report-main-table .status-ng {
         background: #f8d7da;
         color: #721c24;
         font-weight: bold;
-        font-size: 14px;
+        font-size: 16px;
     }
 
     .report-footer {
@@ -576,60 +576,60 @@
         }
 
         .report-main-table {
-            font-size: 10px;
+            font-size: 11px;
         }
 
         .report-main-table th,
         .report-main-table td {
-            padding: 4px 3px;
-            line-height: 1.2;
+            padding: 5px 3px;
+            line-height: 1.3;
         }
 
         .report-main-table th {
-            font-size: 10px;
-        }
-
-        .report-main-table .category-cell {
             font-size: 11px;
         }
 
+        .report-main-table .category-cell {
+            font-size: 13px;
+        }
+
         .report-main-table .subcategory-cell {
-            font-size: 9.5px;
+            font-size: 10.5px;
         }
 
         .report-main-table .item-cell {
-            font-size: 9px;
-            padding: 3px 2px 3px 8px;
+            font-size: 10px;
+            padding: 4px 3px 4px 8px;
         }
 
         .report-main-table .item-cell small {
-            font-size: 8px;
+            font-size: 8.5px;
         }
 
         .report-main-table .day-cell {
-            font-size: 13px;
+            font-size: 14px;
         }
 
         .report-main-table .status-ok,
         .report-main-table .status-ng {
-            font-size: 12px;
+            font-size: 13px;
         }
 
         .report-main-table .person-name-cell {
-            font-size: 9px !important;
-            padding: 3px 2px !important;
+            font-size: 10px !important;
+            padding: 4px 2px !important;
         }
 
         .report-info-table {
-            font-size: 11px;
+            font-size: 12px;
         }
 
         .report-title {
-            font-size: 20px;
+            font-size: 22px;
         }
 
         .report-footer {
-            font-size: 10px;
+            font-size: 11px;
         }
     }
 
@@ -2408,7 +2408,7 @@
         
         // 担当者行
         html += '<tr style="background: #fffacd;">';
-        html += '<td colspan="3" class="subcategory-cell" style="text-align: center; font-weight: bold; font-size: 11px;">担当者</td>';
+        html += '<td colspan="3" class="subcategory-cell" style="text-align: center; font-weight: bold; font-size: 12px;">担当者</td>';
         days.forEach(day => {
             const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
             const inspection = monthInspections.find(i => i.date === dateStr);
@@ -2417,7 +2417,7 @@
                 const person = persons.find(p => p.id === inspection.personId);
                 personName = person ? person.name : '';
             }
-            html += `<td class="person-name-cell" style="font-size: 11px; padding: 5px 2px;">${personName}</td>`;
+            html += `<td class="person-name-cell" style="font-size: 12px; padding: 6px 3px;">${personName}</td>`;
         });
         html += '</tr>';
         
