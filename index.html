@@ -2379,8 +2379,19 @@
             content.classList.toggle('active', i === index);
         });
         
+        // 月次点検簿タブ（タブ4）の場合のみナビゲーションを表示
+        const swipeNav = document.getElementById('swipeNavigation');
+        const quickShareBtn = document.querySelector('.quick-share-btn');
+        
         if (index === 4) {
+            // 月次点検簿タブ
             generateReport();
+            // ナビゲーションはgenerateReport内のupdatePageDisplay()で制御される
+        } else {
+            // 他のタブ：ナビゲーションを非表示
+            if (swipeNav) {
+                swipeNav.classList.remove('show');
+            }
         }
     }
 
