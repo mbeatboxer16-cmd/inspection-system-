@@ -378,7 +378,7 @@
 
     .report-main-table th,
     .report-main-table td {
-        border: 1px solid #333;
+        border: 1.5px solid #333;
         padding: 7px 5px;
         text-align: center;
         line-height: 1.4;
@@ -551,9 +551,15 @@
     }
 
     @media print {
+        @page {
+            size: A4 landscape;
+            margin: 8mm;
+        }
+
         body {
             background: white;
             padding: 0;
+            margin: 0;
         }
 
         .container {
@@ -566,7 +572,8 @@
         .tabs,
         .btn,
         .no-print,
-        .swipe-navigation {
+        .swipe-navigation,
+        .quick-share-btn {
             display: none !important;
         }
 
@@ -575,11 +582,12 @@
         }
 
         .report-page {
-            margin-bottom: 0;
+            margin: 0;
+            padding: 0;
             border: none;
             border-radius: 0;
-            padding: 10mm;
             page-break-after: always;
+            width: 100%;
         }
 
         .report-page:last-child {
@@ -587,86 +595,130 @@
         }
 
         .report-title {
-            font-size: 20px;
-            margin-bottom: 8px;
-            padding: 8px;
+            font-size: 18px;
+            margin-bottom: 5px;
+            padding: 5px;
+            border: 2.5px solid #000;
+            font-weight: bold;
         }
 
         .report-info-table {
-            margin-bottom: 8px;
+            margin-bottom: 5px;
+            font-size: 10px;
         }
 
         .report-info-table td {
-            padding: 6px;
+            padding: 4px 6px;
+            border: 1px solid #000;
+        }
+
+        .report-info-table .label {
+            width: 100px;
+            font-size: 10px;
+            background: #f0f0f0 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
         .report-main-table {
-            font-size: 11px;
+            font-size: 9px;
+            width: 100%;
+            table-layout: fixed;
+            border-collapse: collapse;
         }
 
         .report-main-table th,
         .report-main-table td {
-            padding: 5px 3px;
-            line-height: 1.3;
+            padding: 3px 2px;
+            line-height: 1.2;
+            border: 1px solid #000;
         }
 
         .report-main-table th {
-            font-size: 11px;
+            font-size: 9px;
+            font-weight: bold;
+            background: #e8e8e8 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
         .report-main-table .category-cell {
-            font-size: 13px;
+            width: 25px;
+            font-size: 10px;
+            padding: 4px 2px;
+            background: #f5f5f5 !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
         .report-main-table .subcategory-cell {
-            font-size: 10.5px;
+            width: 60px;
+            font-size: 9px;
+            padding: 3px 4px;
+            background: #fafafa !important;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
         }
 
         .report-main-table .item-cell {
-            font-size: 11px;
-            padding: 4px 3px 4px 8px;
+            width: 140px;
+            font-size: 9px;
+            padding: 3px 6px;
+            text-align: left;
         }
 
         .report-main-table .day-cell {
-            font-size: 14px;
+            width: 18px;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 1px;
         }
 
         .report-main-table .status-ok,
         .report-main-table .status-ng {
-            font-size: 13px;
+            font-size: 11px;
+            font-weight: bold;
+            padding: 2px 1px;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+
+        .report-main-table .status-ok {
+            background: #d4edda !important;
+            color: #000 !important;
+        }
+
+        .report-main-table .status-ng {
+            background: #f8d7da !important;
+            color: #000 !important;
         }
 
         .report-main-table .person-name-cell {
-            font-size: 10px !important;
-            padding: 6px 3px !important;
-            height: 70px !important;
+            font-size: 9px !important;
+            padding: 4px 2px !important;
+            height: 55px !important;
             writing-mode: vertical-rl !important;
             text-orientation: upright !important;
         }
 
-        .report-info-table {
-            font-size: 12px;
-        }
-
-        .report-title {
-            font-size: 22px;
-        }
-
         .report-footer {
-            font-size: 10px;
-            margin-top: 8px;
-            padding: 8px;
+            font-size: 9px;
+            margin-top: 5px;
+            padding: 5px;
+            border: 2px solid #000;
         }
 
         .report-footer p {
-            margin: 2px 0;
-            font-size: 10px;
+            margin: 1px 0;
+            font-size: 9px;
+            line-height: 1.3;
         }
 
         .report-footer .sign-row {
-            margin-top: 6px;
-            padding-top: 4px;
-            font-size: 11px;
+            margin-top: 3px;
+            padding-top: 2px;
+            font-size: 9px;
+            border-top: 1px solid #000;
         }
     }
 
@@ -2377,9 +2429,9 @@
                     <table class="report-main-table">
                         <thead>
                             <tr>
-                                <th rowspan="2" width="60">大分類</th>
-                                <th rowspan="2" width="80">中分類</th>
-                                <th rowspan="2" width="180">点検項目</th>
+                                <th rowspan="2" width="30">大分類</th>
+                                <th rowspan="2" width="70">中分類</th>
+                                <th rowspan="2" width="150">点検項目</th>
                                 <th colspan="${halfDayIndex}">上半期</th>
                                 <th colspan="${daysInMonth - halfDayIndex}">下半期</th>
                             </tr>
@@ -2444,7 +2496,7 @@
         });
         
         // 担当者行
-        html += '<tr style="background: #fffacd;">';
+        html += '<tr style="background: #fffacd; -webkit-print-color-adjust: exact; print-color-adjust: exact;">';
         html += '<td colspan="3" class="subcategory-cell" style="text-align: center; font-weight: bold; font-size: 12px;">担当者</td>';
         days.forEach(day => {
             const dateStr = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
