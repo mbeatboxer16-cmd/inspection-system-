@@ -1013,7 +1013,7 @@
 
 ```
             <h1>🚜 建設機械使用前点検記録システム</h1>
-            <p>機械の日々の点検を簡単に記録・管理できます（改善版 v2.1）</p>
+            <p>機械の日々の点検を簡単に記録・管理できます（改善版 v2.1.1）</p>
             
             <div class="pwa-install-banner" id="pwaInstallBanner">
                 <span>📱 ホーム画面に追加してアプリのように使えます！</span>
@@ -2068,17 +2068,18 @@
         };
         
         const jsonString = JSON.stringify(data, null, 2);
-        const fileName = `点検簿データ_${new Date().toISOString().split('T')[0]}.json`;
+        const dateStr = new Date().toISOString().split('T')[0];
+        const fileName = `inspection-data-${dateStr}.json`;
         
-        // Web Share API対応チェック
-        if (navigator.share && navigator.canShare) {
+        // Web Share API対応チェック（Android/iOS優先）
+        if (navigator.share) {
             try {
                 // Blobを作成
-                const blob = new Blob([jsonString], { type: 'application/json' });
+                const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
                 const file = new File([blob], fileName, { type: 'application/json' });
                 
                 // 共有可能かチェック
-                if (navigator.canShare({ files: [file] })) {
+                if (navigator.canShare && navigator.canShare({ files: [file] })) {
                     await navigator.share({
                         title: '建設機械点検記録データ',
                         text: `点検記録データ（${machines.length}台の機械、${projects.length}件の工事、${inspections.length}件の記録）`,
@@ -2092,43 +2093,68 @@
                     updateBackupStatus('success', '共有完了');
                     
                     return;
+                } else {
+                    // ファイル共有非対応の場合はテキストのみ共有
+                    await navigator.share({
+                        title: '建設機械点検記録データ',
+                        text: jsonString
+                    });
+                    
+                    alert('✅ データを共有しました！\n受信者は共有されたテキストを.jsonファイルとして保存してください。');
+                    
+                    localStorage.setItem('lastBackupTime', new Date().toISOString());
+                    updateBackupStatus('success', '共有完了');
+                    
+                    return;
                 }
             } catch (error) {
-                if (error.name !== 'AbortError') {
-                    console.log('Web Share API エラー:', error);
-                } else {
+                if (error.name === 'AbortError') {
                     // ユーザーがキャンセルした
                     return;
                 }
+                console.log('Web Share API エラー:', error);
+                // エラーの場合は続行してダウンロード方式を試す
             }
         }
         
-        // Web Share API非対応の場合は、ダウンロード + コピー
-        if (!navigator.share) {
-            // 自動ダウンロード
-            const blob = new Blob([jsonString], { type: 'application/json' });
+        // Web Share API非対応または失敗の場合は、ダウンロード方式
+        try {
+            const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
             a.download = fileName;
+            a.style.display = 'none';
+            
+            // Android対応: bodyに追加してからクリック
+            document.body.appendChild(a);
             a.click();
-            URL.revokeObjectURL(url);
+            
+            // クリーンアップ
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
             
             // クリップボードにもコピー（テキストとして）
-            if (navigator.clipboard) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
                 try {
                     await navigator.clipboard.writeText(jsonString);
-                    alert('✅ ファイルをダウンロードし、データをクリップボードにコピーしました！\n\nLINEなどで共有する場合：\n1. ダウンロードしたファイルを添付、または\n2. クリップボードから貼り付け');
+                    alert('✅ ファイルをダウンロードし、データをクリップボードにコピーしました！\n\nファイル名: ' + fileName + '\n\nLINEなどで共有する場合：\n1. ダウンロードしたファイルを添付、または\n2. クリップボードから貼り付け');
                 } catch (err) {
-                    alert('✅ ファイルをダウンロードしました！\nこのファイルをLINEやメールで共有してください。');
+                    alert('✅ ファイルをダウンロードしました！\n\nファイル名: ' + fileName + '\n\nダウンロードフォルダを確認してください。');
                 }
             } else {
-                alert('✅ ファイルをダウンロードしました！\nこのファイルをLINEやメールで共有してください。');
+                alert('✅ ファイルをダウンロードしました！\n\nファイル名: ' + fileName + '\n\nダウンロードフォルダを確認してください。');
             }
             
             // バックアップ記録を更新
             localStorage.setItem('lastBackupTime', new Date().toISOString());
             updateBackupStatus('success', 'バックアップ完了');
+        } catch (error) {
+            console.error('Download error:', error);
+            // ダウンロードが失敗した場合、ダイアログに表示
+            showJsonDialog(jsonString, fileName);
         }
     }
 
@@ -2142,15 +2168,34 @@
             exportDate: new Date().toISOString()
         };
         
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `点検簿データ_${new Date().toISOString().split('T')[0]}.json`;
-        a.click();
-        URL.revokeObjectURL(url);
+        const jsonString = JSON.stringify(data, null, 2);
+        const dateStr = new Date().toISOString().split('T')[0];
+        const fileName = `inspection-data-${dateStr}.json`;
         
-        alert('✅ データをダウンロードしました！\nこのファイルをLINEで送れば、他の人も読み込めます。');
+        try {
+            const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName;
+            a.style.display = 'none';
+            
+            // Android対応: bodyに追加してからクリック
+            document.body.appendChild(a);
+            a.click();
+            
+            // クリーンアップ
+            setTimeout(() => {
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }, 100);
+            
+            alert('✅ データをダウンロードしました！\nファイル名: ' + fileName + '\n\nダウンロードフォルダを確認してください。');
+        } catch (error) {
+            console.error('Download error:', error);
+            // ダウンロードが失敗した場合、テキストエリアに表示
+            showJsonDialog(jsonString, fileName);
+        }
     }
 
     // データインポート
@@ -2341,6 +2386,106 @@
             persons: mergedPersons,
             inspections: mergedInspections
         };
+    }
+
+    // 全データ削除
+    // JSONデータをダイアログで表示（ダウンロード失敗時のフォールバック）
+    function showJsonDialog(jsonString, fileName) {
+        const dialog = document.createElement('div');
+        dialog.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        `;
+        
+        const content = document.createElement('div');
+        content.style.cssText = `
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            max-width: 600px;
+            width: 100%;
+            max-height: 80vh;
+            overflow: auto;
+        `;
+        
+        content.innerHTML = `
+            <h3 style="margin-top: 0;">📋 データのコピー</h3>
+            <p style="color: #666; font-size: 14px;">
+                ダウンロードができなかったため、データを表示します。<br>
+                下のテキストをすべて選択してコピーし、<br>
+                「${fileName}」というファイル名で保存してください。
+            </p>
+            <textarea id="jsonTextArea" style="
+                width: 100%;
+                height: 300px;
+                border: 2px solid #ddd;
+                border-radius: 5px;
+                padding: 10px;
+                font-family: monospace;
+                font-size: 12px;
+                resize: vertical;
+            " readonly>${jsonString}</textarea>
+            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                <button onclick="copyJsonText()" style="
+                    flex: 1;
+                    padding: 12px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 16px;
+                ">📋 コピーする</button>
+                <button onclick="closeJsonDialog()" style="
+                    flex: 1;
+                    padding: 12px;
+                    background: #6c757d;
+                    color: white;
+                    border: none;
+                    border-radius: 8px;
+                    cursor: pointer;
+                    font-size: 16px;
+                ">閉じる</button>
+            </div>
+            <p style="color: #666; font-size: 12px; margin-top: 10px; margin-bottom: 0;">
+                💡 コピーした後、メモ帳などに貼り付けて「${fileName}」として保存してください。
+            </p>
+        `;
+        
+        dialog.appendChild(content);
+        document.body.appendChild(dialog);
+        
+        // グローバル関数として定義
+        window.copyJsonText = function() {
+            const textarea = document.getElementById('jsonTextArea');
+            textarea.select();
+            try {
+                document.execCommand('copy');
+                alert('✅ データをコピーしました！\nメモ帳などに貼り付けて「' + fileName + '」として保存してください。');
+            } catch (err) {
+                alert('⚠️ コピーに失敗しました。手動でテキストを選択してコピーしてください。');
+            }
+        };
+        
+        window.closeJsonDialog = function() {
+            document.body.removeChild(dialog);
+            delete window.copyJsonText;
+            delete window.closeJsonDialog;
+        };
+        
+        // テキストエリアを自動選択
+        setTimeout(() => {
+            document.getElementById('jsonTextArea').select();
+        }, 100);
     }
 
     // 全データ削除
