@@ -1013,7 +1013,7 @@
 
 ```
             <h1>🚜 建設機械使用前点検記録システム</h1>
-            <p>機械の日々の点検を簡単に記録・管理できます（改善版 v2.1.1）</p>
+            <p>機械の日々の点検を簡単に記録・管理できます（改善版 v2.1.2 - LINE完全対応）</p>
             
             <div class="pwa-install-banner" id="pwaInstallBanner">
                 <span>📱 ホーム画面に追加してアプリのように使えます！</span>
@@ -2069,14 +2069,34 @@
         
         const jsonString = JSON.stringify(data, null, 2);
         const dateStr = new Date().toISOString().split('T')[0];
-        const fileName = `inspection-data-${dateStr}.json`;
+        
+        // ユーザーに共有方法を選択させる
+        const choice = await showShareOptions();
+        
+        if (choice === 'cancel') return;
+        
+        let fileName, mimeType;
+        
+        if (choice === 'txt') {
+            // LINE対応：.txt拡張子で共有
+            fileName = `inspection-data-${dateStr}.txt`;
+            mimeType = 'text/plain;charset=utf-8';
+        } else if (choice === 'text-only') {
+            // テキストのみ共有（ファイルなし）
+            await shareAsText(jsonString);
+            return;
+        } else {
+            // 通常の.json形式
+            fileName = `inspection-data-${dateStr}.json`;
+            mimeType = 'application/json;charset=utf-8';
+        }
         
         // Web Share API対応チェック（Android/iOS優先）
         if (navigator.share) {
             try {
                 // Blobを作成
-                const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
-                const file = new File([blob], fileName, { type: 'application/json' });
+                const blob = new Blob([jsonString], { type: mimeType });
+                const file = new File([blob], fileName, { type: mimeType });
                 
                 // 共有可能かチェック
                 if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -2086,7 +2106,7 @@
                         files: [file]
                     });
                     
-                    alert('✅ データを共有しました！');
+                    alert('✅ データを共有しました！\n\n【LINEで受信した場合】\n1. ファイルをタップ\n2. 「ダウンロード」または「Keep」に保存\n3. ファイルマネージャーで確認');
                     
                     // 共有したのでバックアップ記録を更新
                     localStorage.setItem('lastBackupTime', new Date().toISOString());
@@ -2100,7 +2120,7 @@
                         text: jsonString
                     });
                     
-                    alert('✅ データを共有しました！\n受信者は共有されたテキストを.jsonファイルとして保存してください。');
+                    alert('✅ データを共有しました！\n\n受信者へ：\n共有されたテキストを「' + fileName + '」として保存してください。');
                     
                     localStorage.setItem('lastBackupTime', new Date().toISOString());
                     updateBackupStatus('success', '共有完了');
@@ -2119,7 +2139,7 @@
         
         // Web Share API非対応または失敗の場合は、ダウンロード方式
         try {
-            const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8' });
+            const blob = new Blob([jsonString], { type: mimeType });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
@@ -2155,6 +2175,154 @@
             console.error('Download error:', error);
             // ダウンロードが失敗した場合、ダイアログに表示
             showJsonDialog(jsonString, fileName);
+        }
+    }
+
+    // 共有方法選択ダイアログ
+    function showShareOptions() {
+        return new Promise((resolve) => {
+            const dialog = document.createElement('div');
+            dialog.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.8);
+                z-index: 10000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            `;
+            
+            const content = document.createElement('div');
+            content.style.cssText = `
+                background: white;
+                border-radius: 15px;
+                padding: 25px;
+                max-width: 400px;
+                width: 100%;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            `;
+            
+            content.innerHTML = `
+                <h3 style="margin-top: 0; color: #333; font-size: 20px;">📤 共有方法を選択</h3>
+                <p style="color: #666; font-size: 14px; margin-bottom: 20px;">
+                    LINEで共有する場合は「TXT形式」を推奨します
+                </p>
+                
+                <button onclick="selectShare('txt')" style="
+                    width: 100%;
+                    padding: 15px;
+                    margin-bottom: 10px;
+                    background: linear-gradient(135deg, #06C755 0%, #00B900 100%);
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    font-weight: bold;
+                    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                ">
+                    📱 TXT形式（LINE推奨）
+                </button>
+                
+                <button onclick="selectShare('json')" style="
+                    width: 100%;
+                    padding: 15px;
+                    margin-bottom: 10px;
+                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    font-weight: bold;
+                    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                ">
+                    💾 JSON形式（標準）
+                </button>
+                
+                <button onclick="selectShare('text-only')" style="
+                    width: 100%;
+                    padding: 15px;
+                    margin-bottom: 10px;
+                    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+                    color: white;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    font-size: 16px;
+                    font-weight: bold;
+                    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+                ">
+                    📝 テキストのみ（ファイルなし）
+                </button>
+                
+                <button onclick="selectShare('cancel')" style="
+                    width: 100%;
+                    padding: 12px;
+                    background: #e0e0e0;
+                    color: #666;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+                    font-size: 14px;
+                ">
+                    キャンセル
+                </button>
+                
+                <div style="margin-top: 15px; padding: 10px; background: #f8f9fa; border-radius: 8px; font-size: 12px; color: #666;">
+                    <strong>💡 ヒント：</strong><br>
+                    • TXT形式：LINEで確実にダウンロード可能<br>
+                    • JSON形式：通常のファイル共有<br>
+                    • テキストのみ：メッセージとして送信
+                </div>
+            `;
+            
+            dialog.appendChild(content);
+            document.body.appendChild(dialog);
+            
+            window.selectShare = function(choice) {
+                document.body.removeChild(dialog);
+                delete window.selectShare;
+                resolve(choice);
+            };
+        });
+    }
+
+    // テキストのみ共有
+    async function shareAsText(jsonString) {
+        if (navigator.share) {
+            try {
+                await navigator.share({
+                    title: '建設機械点検記録データ',
+                    text: jsonString
+                });
+                
+                alert('✅ テキストを共有しました！\n\n受信者へ：\n1. 共有されたテキストをコピー\n2. メモ帳アプリに貼り付け\n3. 「inspection-data.txt」として保存\n4. アプリで「データを読み込む」から読み込み');
+                
+                localStorage.setItem('lastBackupTime', new Date().toISOString());
+                updateBackupStatus('success', '共有完了');
+            } catch (error) {
+                if (error.name !== 'AbortError') {
+                    console.error('Share error:', error);
+                    // クリップボードにコピー
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        await navigator.clipboard.writeText(jsonString);
+                        alert('✅ データをクリップボードにコピーしました！\nLINEなどで貼り付けて送信してください。');
+                    }
+                }
+            }
+        } else {
+            // Web Share API非対応の場合はクリップボードにコピー
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(jsonString);
+                alert('✅ データをクリップボードにコピーしました！\nLINEなどで貼り付けて送信してください。');
+            } else {
+                showJsonDialog(jsonString, 'inspection-data.txt');
+            }
         }
     }
 
@@ -2202,7 +2370,7 @@
     function importData() {
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = 'application/json';
+        input.accept = 'application/json,.json,.txt,text/plain';
         input.onchange = (e) => {
             const file = e.target.files[0];
             const reader = new FileReader();
@@ -2232,7 +2400,7 @@
                         alert('✅ データを読み込みました！');
                     }
                 } catch (error) {
-                    alert('❌ ファイルの読み込みに失敗しました。\nJSON形式のファイルを選択してください。');
+                    alert('❌ ファイルの読み込みに失敗しました。\nJSON形式のファイル（.jsonまたは.txt）を選択してください。\n\nLINEで受信したファイルの場合：\n1. Keepに保存してからダウンロード\n2. ファイルマネージャーで確認');
                     console.error('インポートエラー:', error);
                 }
             };
@@ -2245,7 +2413,7 @@
     function mergeData() {
         const input = document.createElement('input');
         input.type = 'file';
-        input.accept = 'application/json';
+        input.accept = 'application/json,.json,.txt,text/plain';
         input.multiple = true;
         
         input.onchange = async (e) => {
