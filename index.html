@@ -1013,7 +1013,7 @@
 
 ```
             <h1>🚜 建設機械使用前点検記録システム</h1>
-            <p>機械の日々の点検を簡単に記録・管理できます（改善版 v2.1.2 - LINE完全対応）</p>
+            <p>機械の日々の点検を簡単に記録・管理できます（改善版 v2.1.3）</p>
             
             <div class="pwa-install-banner" id="pwaInstallBanner">
                 <span>📱 ホーム画面に追加してアプリのように使えます！</span>
@@ -1963,13 +1963,8 @@
                 const sheetData = generateExcelData(project, machine, year, month, monthInspections);
                 const worksheet = XLSX.utils.aoa_to_sheet(sheetData);
                 
-                // 列幅設定
-                worksheet['!cols'] = [
-                    { wch: 10 },  // 大分類
-                    { wch: 12 },  // 中分類
-                    { wch: 30 },  // 点検項目
-                    ...Array(31).fill({ wch: 4 })  // 日付
-                ];
+                // 印刷プレビューと同じレイアウトを適用
+                applyPrintLayout(worksheet, project, machine, year, month, monthInspections);
                 
                 const sheetName = `${machine.name.substring(0, 15)}_${month}月`;
                 XLSX.utils.book_append_sheet(workbook, worksheet, sheetName);
@@ -1979,7 +1974,244 @@
         const fileName = `点検記録_${year}年${month}月_${new Date().toISOString().split('T')[0]}.xlsx`;
         XLSX.writeFile(workbook, fileName);
         
-        alert('✅ Excelファイルをダウンロードしました！');
+        alert('✅ Excelファイルをダウンロードしました！\n\n印刷プレビューと同じレイアウトで出力されています。');
+    }
+
+    // 印刷レイアウト適用（印刷プレビューと完全一致）
+    function applyPrintLayout(worksheet, project, machine, year, month, monthInspections) {
+        const daysInMonth = new Date(year, month, 0).getDate();
+        
+        // ページ設定（A4横向き）
+        worksheet['!pageSetup'] = {
+            paperSize: 9,  // A4
+            orientation: 'landscape',  // 横向き
+            scale: 100,
+            fitToWidth: 1,
+            fitToHeight: 0,
+            horizontalDpi: 300,
+            verticalDpi: 300
+        };
+        
+        // 余白設定（印刷プレビューと同じ）
+        worksheet['!margins'] = {
+            left: 0.25,
+            right: 0.25,
+            top: 0.75,
+            bottom: 0.75,
+            header: 0.3,
+            footer: 0.3
+        };
+        
+        // ヘッダー・フッター設定
+        worksheet['!headerFooter'] = {
+            oddHeader: '&C建設機械使用前点検記録',
+            oddFooter: '&L' + project.name + '&C&P / &N ページ&R' + year + '年' + month + '月'
+        };
+        
+        // 列幅設定（印刷プレビューと同じ）
+        const colWidths = [
+            { wch: 8 },   // A: 大分類
+            { wch: 10 },  // B: 中分類
+            { wch: 28 }   // C: 点検項目
+        ];
+        // 日付列（1日〜31日）
+        for (let i = 0; i < daysInMonth; i++) {
+            colWidths.push({ wch: 3.5 });
+        }
+        worksheet['!cols'] = colWidths;
+        
+        // 行の高さ設定
+        const rowHeights = [];
+        rowHeights[0] = { hpt: 24 };  // タイトル行
+        rowHeights[1] = { hpt: 10 };  // 空白行
+        rowHeights[2] = { hpt: 18 };  // 工事名
+        rowHeights[3] = { hpt: 18 };  // 工事箇所
+        rowHeights[4] = { hpt: 10 };  // 空白行
+        rowHeights[5] = { hpt: 18 };  // 機械名称
+        rowHeights[6] = { hpt: 10 };  // 空白行
+        rowHeights[7] = { hpt: 20 };  // ヘッダー1（上半期/下半期）
+        rowHeights[8] = { hpt: 20 };  // ヘッダー2（日付）
+        
+        // 点検項目行
+        for (let i = 0; i < inspectionItems.reduce((sum, cat) => sum + cat.items.length, 0); i++) {
+            rowHeights[9 + i] = { hpt: 18 };
+        }
+        // 担当者行
+        rowHeights[9 + inspectionItems.reduce((sum, cat) => sum + cat.items.length, 0)] = { hpt: 60 };
+        
+        worksheet['!rows'] = rowHeights;
+        
+        // セルのスタイル設定
+        const range = XLSX.utils.decode_range(worksheet['!ref']);
+        
+        // タイトル行のスタイル
+        if (worksheet['A1']) {
+            worksheet['A1'].s = {
+                font: { bold: true, sz: 16 },
+                alignment: { horizontal: 'center', vertical: 'center' }
+            };
+        }
+        
+        // 工事情報のスタイル
+        ['A3', 'E3', 'A4', 'E4'].forEach(cell => {
+            if (worksheet[cell]) {
+                worksheet[cell].s = {
+                    font: { bold: true },
+                    alignment: { horizontal: 'left', vertical: 'center' },
+                    fill: { fgColor: { rgb: 'E7E6E6' } }
+                };
+            }
+        });
+        
+        // 機械名称のスタイル
+        if (worksheet['A6']) {
+            worksheet['A6'].s = {
+                font: { bold: true },
+                alignment: { horizontal: 'left', vertical: 'center' },
+                fill: { fgColor: { rgb: 'E7E6E6' } }
+            };
+        }
+        
+        // ヘッダー行のスタイル（8, 9行目）
+        for (let col = 0; col <= range.e.c; col++) {
+            const cellAddr8 = XLSX.utils.encode_cell({ r: 7, c: col });
+            const cellAddr9 = XLSX.utils.encode_cell({ r: 8, c: col });
+            
+            if (worksheet[cellAddr8]) {
+                worksheet[cellAddr8].s = {
+                    font: { bold: true, sz: 10 },
+                    alignment: { horizontal: 'center', vertical: 'center' },
+                    fill: { fgColor: { rgb: 'D9D9D9' } },
+                    border: {
+                        top: { style: 'thin', color: { rgb: '000000' } },
+                        bottom: { style: 'thin', color: { rgb: '000000' } },
+                        left: { style: 'thin', color: { rgb: '000000' } },
+                        right: { style: 'thin', color: { rgb: '000000' } }
+                    }
+                };
+            }
+            
+            if (worksheet[cellAddr9]) {
+                worksheet[cellAddr9].s = {
+                    font: { bold: true, sz: 9 },
+                    alignment: { horizontal: 'center', vertical: 'center' },
+                    fill: { fgColor: { rgb: 'D9D9D9' } },
+                    border: {
+                        top: { style: 'thin', color: { rgb: '000000' } },
+                        bottom: { style: 'thin', color: { rgb: '000000' } },
+                        left: { style: 'thin', color: { rgb: '000000' } },
+                        right: { style: 'thin', color: { rgb: '000000' } }
+                    }
+                };
+            }
+        }
+        
+        // 点検項目のスタイル
+        const itemStartRow = 9;
+        const itemCount = inspectionItems.reduce((sum, cat) => sum + cat.items.length, 0);
+        
+        for (let row = itemStartRow; row < itemStartRow + itemCount; row++) {
+            for (let col = 0; col <= range.e.c; col++) {
+                const cellAddr = XLSX.utils.encode_cell({ r: row, c: col });
+                if (!worksheet[cellAddr]) continue;
+                
+                const baseStyle = {
+                    alignment: { horizontal: 'center', vertical: 'center', wrapText: false },
+                    border: {
+                        top: { style: 'thin', color: { rgb: '000000' } },
+                        bottom: { style: 'thin', color: { rgb: '000000' } },
+                        left: { style: 'thin', color: { rgb: '000000' } },
+                        right: { style: 'thin', color: { rgb: '000000' } }
+                    }
+                };
+                
+                // 大分類列（A列）
+                if (col === 0) {
+                    baseStyle.font = { bold: true };
+                    baseStyle.fill = { fgColor: { rgb: 'F2F2F2' } };
+                    baseStyle.alignment.horizontal = 'center';
+                }
+                // 中分類列（B列）
+                else if (col === 1) {
+                    baseStyle.fill = { fgColor: { rgb: 'F2F2F2' } };
+                    baseStyle.alignment.horizontal = 'center';
+                }
+                // 点検項目列（C列）
+                else if (col === 2) {
+                    baseStyle.alignment.horizontal = 'left';
+                    baseStyle.font = { sz: 9 };
+                }
+                // 日付列（○/△/×）
+                else {
+                    baseStyle.font = { sz: 10 };
+                }
+                
+                worksheet[cellAddr].s = baseStyle;
+            }
+        }
+        
+        // 担当者行のスタイル（縦書き）
+        const personRow = itemStartRow + itemCount;
+        for (let col = 0; col <= range.e.c; col++) {
+            const cellAddr = XLSX.utils.encode_cell({ r: personRow, c: col });
+            if (!worksheet[cellAddr]) continue;
+            
+            const style = {
+                alignment: { 
+                    horizontal: 'center', 
+                    vertical: 'center',
+                    textRotation: 90  // 縦書き
+                },
+                font: { bold: col <= 2, sz: 9 },
+                fill: { fgColor: { rgb: col <= 2 ? 'E7E6E6' : 'FFFFFF' } },
+                border: {
+                    top: { style: 'thin', color: { rgb: '000000' } },
+                    bottom: { style: 'thin', color: { rgb: '000000' } },
+                    left: { style: 'thin', color: { rgb: '000000' } },
+                    right: { style: 'thin', color: { rgb: '000000' } }
+                }
+            };
+            
+            worksheet[cellAddr].s = style;
+        }
+        
+        // セル結合（タイトル）
+        worksheet['!merges'] = [];
+        worksheet['!merges'].push({
+            s: { r: 0, c: 0 },
+            e: { r: 0, c: daysInMonth + 2 }
+        });
+        
+        // 工事情報のセル結合
+        worksheet['!merges'].push({ s: { r: 2, c: 1 }, e: { r: 2, c: 3 } });  // 工事名
+        worksheet['!merges'].push({ s: { r: 2, c: 5 }, e: { r: 2, c: 7 } });  // 請負者
+        worksheet['!merges'].push({ s: { r: 3, c: 1 }, e: { r: 3, c: 3 } });  // 工事箇所
+        worksheet['!merges'].push({ s: { r: 3, c: 5 }, e: { r: 3, c: 7 } });  // 対象年月
+        
+        // 機械名称のセル結合
+        worksheet['!merges'].push({ s: { r: 5, c: 1 }, e: { r: 5, c: 7 } });
+        
+        // 大分類のセル結合
+        let currentRow = itemStartRow;
+        inspectionItems.forEach(category => {
+            if (category.items.length > 1) {
+                worksheet['!merges'].push({
+                    s: { r: currentRow, c: 0 },
+                    e: { r: currentRow + category.items.length - 1, c: 0 }
+                });
+            }
+            currentRow += category.items.length;
+        });
+        
+        // 印刷設定
+        worksheet['!printHeader'] = '1:9';  // 1-9行目を各ページに印刷
+        worksheet['!autofilter'] = undefined;  // オートフィルターなし
+        
+        // グリッド線を印刷
+        worksheet['!printOptions'] = {
+            gridLines: true,
+            headings: false
+        };
     }
 
     // Excel用データ生成
@@ -2013,7 +2245,7 @@
         header2.push(...days);
         data.push(header2);
         
-        // 点検項目
+        // 点検項目（印刷プレビューと同じ形式：横書き1行）
         inspectionItems.forEach(category => {
             category.items.forEach((item, itemIndex) => {
                 const row = [];
@@ -2025,6 +2257,7 @@
                 }
                 
                 row.push(item.subCategory);
+                // 印刷プレビューと同じ形式：項目名(説明)を1行で表示
                 row.push(`${item.item}(${item.description})`);
                 
                 const key = `${category.category}_${itemIndex}`;
